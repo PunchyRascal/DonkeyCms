@@ -1,7 +1,6 @@
 {
     "name": "punchyrascal/donkeycms",
     "description": "This is a very cool CMS and eshop!",
-    "version": "0.3.0",
     "type": "library",
     "keywords": ["cms", "eshop", "donkey"],
     "homepage": "https://github.com/PunchyRascal/DonkeyCms",
