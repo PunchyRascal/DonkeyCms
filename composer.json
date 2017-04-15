@@ -1,0 +1,36 @@
+{
+    "name": "PunchyRascal/DonkeyCms",
+    "description": "This is a very cool CMS/eshop!",
+    "version": "0.3.0",
+    "type": "library",
+    "keywords": ["cms", "eshop", "donkey"],
+    "homepage": "https://github.com/PunchyRascal/DonkeyCms",
+    "license": "MIT",
+	"require": {
+		"twig/twig": "~1.0",
+		"tinymce/tinymce": "~4.1",
+		"oyejorge/less.php": "v1.7.0.5",
+		"adoy/oauth2": "dev-master",
+		"w2media/ecommerceapiclient": "1.*",
+		"phpmailer/phpmailer": "^5.2",
+		"google/recaptcha": "~1.1",
+		"heureka/overeno-zakazniky": "^2.0",
+		"kevinlebrun/colors.php": "^1.0",
+		"filipsedivy/php-eet": "^2.0",
+		"erusev/parsedown": "^1.6",
+		"facebook/graph-sdk": "^5.4"
+	},
+	"autoload": {
+		"psr-4": {
+			"DonkeyCms\\": "lib"
+		}
+	},
+	"require-dev": {
+		"nette/tester": "^1.7",
+		"mockery/mockery": "0.9.*",
+		"phpspec/phpspec": "^2.5",
+		"codeception/codeception": "^2.1",
+		"sebastian/phpcpd": "^2.0",
+		"phpstan/phpstan": "^0.6.3"
+	}
+}
