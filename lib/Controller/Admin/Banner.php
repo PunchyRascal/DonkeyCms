@@ -13,8 +13,8 @@ class Banner extends Base {
 
 		if (Http::getGet('banner_reset')) {
 			copy(
-				__DIR__. '/../../../public_html/images/banner2.jpg',
-				__DIR__ .'/../../../public_html/images/norco_banner2.jpg'
+				__DIR__. '/../../../../../../public_html/images/banner-default.png',
+				__DIR__ .'/../../../../../../public_html/images/banner.png'
 			);
 			Http::redirect("/?p=admin&action=banner&m=1");
 		}
@@ -22,7 +22,7 @@ class Banner extends Base {
 			if (Http::getFile('banner_file|tmp_name')) {
 				copy(
 					Http::getFile('banner_file|tmp_name'),
-					__DIR__ .'/../../../public_html/images/norco_banner2.jpg'
+					__DIR__ .'/../../../../../../public_html/images/banner.png'
 				);
 			}
 			Http::redirect("/?p=admin&action=banner&m=1");

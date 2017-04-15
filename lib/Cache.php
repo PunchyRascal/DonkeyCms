@@ -7,7 +7,7 @@ namespace PunchyRascal\DonkeyCms;
  */
 class Cache {
 
-	const CACHE_DIR = '../cache/donkeyCms';
+	const CACHE_DIR = '../../../../cache/donkeyCms';
 
 	/**
 	 * Default time to live - seconds

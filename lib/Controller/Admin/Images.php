@@ -25,7 +25,7 @@ class Images extends Base {
 	}
 
 	private function initData() {
-		$this->path = __DIR__ . '/../../../public_html/';
+		$this->path = __DIR__ . '/../../../../../../public_html/';
 		$this->referenceId = (int) Http::getPost('id', Http::getGet('id'));
 		if (Http::getPost('type', Http::getGet('type')) == 'art') {
 			$this->table = $this->db->createParam('ID', 'art_image');

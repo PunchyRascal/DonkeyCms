@@ -16,7 +16,7 @@ class Logger {
 		if ($filename === self::TYPE_RETURN_OUTPUT) {
 			$this->filename = self::TYPE_RETURN_OUTPUT;
 		} elseif ($filename) {
-			$this->filename = __DIR__ . "/../logs/$filename";
+			$this->filename = __DIR__ . "/../../../../logs/$filename";
 			touch($this->filename);
 		}
 	}
