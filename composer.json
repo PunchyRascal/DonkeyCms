@@ -22,7 +22,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"DonkeyCms\\": "lib"
+			"PunchyRascal\\DonkeyCms\\": "lib"
 		}
 	},
 	"require-dev": {
