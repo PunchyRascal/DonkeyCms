@@ -118,6 +118,12 @@ class Router {
 					default:
 						$controllerClass = Controller\Admin\Main::class;
 						break;
+					case 'adminUsers':
+						$controllerClass = Controller\Admin\AdminUsers::class;
+						break;
+					case 'adminUserEdit':
+						$controllerClass = Controller\Admin\AdminUserEdit::class;
+						break;
 					case 'paymentDelivery':
 						$controllerClass = Controller\Admin\PaymentDelivery\PaymentDeliveryList::class;
 						break;
