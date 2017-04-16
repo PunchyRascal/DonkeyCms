@@ -1,5 +1,5 @@
 actor: Tester
-url: http://zbk.localhost
+url: https://donkey.localhost
 paths:
     tests: codeceptionTests
     log: codeceptionTests/_output
