@@ -1,0 +1,201 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+	<div id="adminOrders">
+
+		<ul class="nav nav-tabs">
+			<li {{ currentStatus == 1 ? 'class="active"' }}>
+				<a class="statusNew" href="/?p=admin&amp;action=e_orders&amp;status=1">
+					Nové
+					{% if counts.new %}
+						<span class="badge">{{counts.new}}</span>
+					{% endif %}
+				</a>
+			<li {{ currentStatus == 2 ? 'class="active"' }}>
+				<a class="statusWaiting" href="/?p=admin&amp;action=e_orders&amp;status=2">
+					Čeká se
+					{% if counts.waiting %}
+						<span class="badge">{{counts.waiting}}</span>
+					{% endif %}
+				</a>
+			<li {{ currentStatus == 3 ? 'class="active"' }}>
+				<a class="statusConfirmed" href="/?p=admin&amp;action=e_orders&amp;status=3">
+					Potvrzeno
+					{% if counts.confirmed %}
+						<span class="badge">{{counts.confirmed}}</span>
+					{% endif %}
+				</a>
+			<li {{ currentStatus == 4 ? 'class="active"' }}>
+				<a class="statusSent" href="/?p=admin&amp;action=e_orders&amp;status=4">Odesláno</a>
+			<li {{ currentStatus == 5 ? 'class="active"' }}>
+				<a class="statusCancelled" href="/?p=admin&amp;action=e_orders&amp;status=5">Zrušeno</a>
+			<li {{ currentStatus == 6 ? 'class="active"' }}>
+				<a class="statusReturned" href="/?p=admin&amp;action=e_orders&amp;status=6">Vráceno</a>
+			<li {{ currentStatus == -1 ? 'class="active"' }}>
+				<a class="statusAll" href="/?p=admin&amp;action=e_orders&amp;status=-1"><em>Hledání</em>
+					<span class="glyphicon glyphicon-search"></span></a>
+		</ul>
+
+		{% if currentStatus == -1 %}
+			<br>
+
+			<form class="form-inlinea">
+				<div class="row">
+
+					<div class="col-xs-8">
+						<input placeholder="číslo, jméno, adresa, email, telefon, poznámka" class="form-control" type="search" name=q value="{{ searchQuery }}">
+					</div>
+
+					<div class="col-xs-2">
+						<input class="form-control btn-primary" type="submit" value="Hledat">
+					</div>
+
+					<input type="hidden" name="p" value=admin>
+					<input type="hidden" name="action" value=e_orders>
+					<input type="hidden" name="status" value=-1>
+				</div>
+			</form>
+
+			{% if searchMessage %}
+				<div class="messageOk">{{searchMessage}}</div>
+			{% endif %}
+
+		{% endif %}
+
+		{% include 'base/pager.twig' %}
+
+		{% for item in orders %}
+
+			<div class='oItem orderStatus{{ item.status }}'>
+
+				<h3>
+					Objednávka č. {{ item.public_id }}
+					<a target=_blank href='/?p=admin&amp;action=showInvoice&amp;id={{ item.id }}'
+					><img height=24 src='/images/invoice.jpg' alt=faktura class="middle"></a>
+
+					<a target="_blank" class="btn btn-sm btn-default" href="/?p=admin&amp;action=orderDetail&amp;id={{ item.id }}">
+						Detail
+					</a>
+				</h3>
+
+				<table summary='Kontaktní a fakturační údaje' class='items table-condensed'>
+					<tr>
+						<td>datum objednání:</td>
+						<td>{{ item.submission_date|datetime }}</td>
+					</tr>
+					<tr>
+						<td>jméno:</td>
+						<td>{{ item.name }}</td>
+					</tr>
+					<tr>
+						<td>ulice:</td>
+						<td>{{ item.street }}</td>
+					</tr>
+					<tr>
+						<td>město:</td>
+						<td>{{ item.town }}</td>
+					</tr>
+					<tr>
+						<td>PSČ:</td>
+						<td>{{ item.zip }}</td>
+					</tr>
+					<tr>
+						<td>e-mail:</td>
+						<td><a href='mailto:{{ item.email }}'>{{ item.email }}</a></td>
+					</tr>
+					<tr>
+						<td>telefon:</td>
+						<td>{{ item.phone }}</td>
+					</tr>
+					<tr>
+						<td>poznámka:</td>
+						<td>{{ item.note ? item.note|nl2br : '-' }}</td>
+					</tr>
+				</table>
+
+				<div class='orderStatus alertId{{ item.model.getStatusAlertType() }}'>
+					<form action='/?p=admin&amp;action=e_orders' method='post'>
+						<h3>
+							<strong>
+								<span class='alert{{ item.model.getStatusAlertType() }}'>
+									{{ item.model.getStatusLabel() }}
+									{{ item.status_change_date ? '('~item.status_change_date|datetime~')' }}
+								</span>
+							</strong>
+						</h3>
+
+						<select class="autosubmit form-control" name="order_status">
+							<option value="1" {{ item.status == 1 ? 'selected' }}>Nová</option>
+							<option value="2" {{ item.status == 2 ? 'selected' }}>Čeká se</option>
+							<option value="3" {{ item.status == 3 ? 'selected' }}>Potvrzeno</option>
+							<option value="4" {{ item.status == 4 ? 'selected' }}>Odesláno</option>
+							<option value="5" {{ item.status == 5 ? 'selected' }}>Zrušeno</option>
+							<option value="6" {{ item.status == 6 ? 'selected' }}>Vráceno</option>
+						</select>
+
+						<textarea class="form-control" placeholder='tajná poznámka' name="order_status_note" cols="30" rows="5">{{ item.status_note }}</textarea>
+
+						<div class="text-right">
+							<input type="submit" value="Uložit" class="btn btn-default" />
+							<input type="hidden" name="orderStatusSubmit" value="1" />
+							<input type="hidden" name="currentStatus" value="{{ currentStatus }}" />
+						</div>
+
+						<input type="hidden" name="id" value="{{ item.id }}" />
+					</form>
+				</div>
+
+				<table class='table table-striped table-bordered'>
+					<tr>
+						<th>položka</th>
+						<th>cena</th>
+						<th>počet</th>
+						<th>(varianta)</th>
+					</tr>
+					{% for row in item.model.getItems() %}
+						<tr>
+							<td><a target="_blank" href='{{ common.appUrl }}/?p=e-shop&id={{ row.product_id }}'>{{ row.product_name }}</a></td>
+							<td class="number"><span class='nowrap'>{{ row.price|number_format }} Kč</span></td>
+							<td class="number">{{ row.amount }}</td>
+							<td>{{ row.variant }}</td>
+						</tr>
+					{% endfor %}
+
+					<tr>
+					<td>doprava</td>
+					<td class=number>{{ item.price_delivery }} Kč</td>
+					<td colspan='2'>
+						{{ item.model.getPostageLabel() }}
+						{% if item.model.zasilkovna_branch %}
+							<br><a href="http://www.zasilkovna.cz/vyhledavani/?det={{ item.model.zasilkovna_id }}" target=_blank>Detail balíku na Zásilkovně &raquo;</a>
+						{% endif %}
+
+					</td>
+					</tr>
+
+					<tr>
+						<td>platba</td>
+						<td class=number>{{ item.price_payment }} Kč</td>
+						<td colspan=2>{{ item.model.getPaymentLabel() }}</td>
+					</tr>
+
+					<tr>
+						<td><strong>CELKEM</strong></td>
+						<td colspan='3' class="num"><strong>{{ item.price_total|number_format }} Kč</strong></td>
+					</tr>
+				</table>
+
+				<div class='clear'></div>
+
+			</div>
+
+		{% else %}
+			{% if currentStatus != -1 %}
+				<div class="messageInfo">Kde nic, tu nic!</div>
+			{% endif %}
+		{% endfor %}
+	</div>
+
+	{% include 'base/pager.twig' %}
+
+{% endblock %}

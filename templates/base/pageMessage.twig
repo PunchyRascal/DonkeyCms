@@ -1,0 +1,5 @@
+{% if common.globalMessage %}
+	{% set messageType = common.globalMessage.type ?: 'info' %}
+	{% set messageText = common.globalMessage.text ?: common.globalMessage %}
+	<div class="alert dismissable alert-{{ messageType }}">{{ messageText }}</div>
+{% endif %}

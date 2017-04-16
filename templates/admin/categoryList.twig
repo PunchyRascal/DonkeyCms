@@ -1,0 +1,21 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>Kategorie</h1>
+
+	<div id="adminButtons">
+		<a href="/?p=admin&amp;action=cat_edit" class="btn btn-success">Přidat kategorii</a>
+	</div>
+
+	{% if existingRecordsError %}
+		<div class="messageKo">
+			Tuto kategorii nelze smazat, neboť obsahuje další podkategorie nebo produkty.
+		</div>
+	{% endif %}
+
+	<div class=catMenu data-line-content="{{ lineContent|escape('html_attr') }}">
+		{{ cats|raw }}
+	</div>
+
+{% endblock %}

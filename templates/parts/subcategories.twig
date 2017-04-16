@@ -1,0 +1,29 @@
+{% if subCategories and not searchMode %}
+	<div id="subCategories" class="{{ category.id ? 'withProducts' : 'catsOnly' }}">
+		<h4>Podkategorie:</h4>
+		{% for item in subCategories %}
+			<div class="item editObject {{ item.image_url ? 'hasImg' }}" data-edit-action="cat_edit" data-edit-id="{{ item.id }}">
+				<a class="main" href="/?p=e-shop&amp;cat={{ item.id }}">
+					<div class="inner">
+
+						{% if category.id %}
+							{% if item.image_url %}
+								<div class="img"><img src="{{ item.image_url }}" alt=""></div>
+							{% endif %}
+							<div class="catLabel"><span>{{ item.name }}</span></div>
+						{% endif %}
+
+						{% if not category.id %}
+							{{ item.name }}
+							{% if item.image_url %}
+								<div class="img"><img src="{{ item.image_url }}" alt=""></div>
+							{% endif %}
+						{% endif %}
+
+					</div>
+				</a>
+			</div>
+		{% endfor %}
+		<div class="clear"></div>
+	</div>
+{% endif %}

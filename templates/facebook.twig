@@ -1,0 +1,33 @@
+{% extends "base/layout.twig" %}
+
+{% block content %}
+
+	<h1>Novinky</h1>
+
+	{% for item in stories %}
+		<h2><a target="_blank" href="{{item.url}}">{{item.date|datetime}}</a></h2>
+		<p>{{item.text}}</p>
+		{% for img in item.images %}
+			<a class="viewPhoto" href="{{img}}"><img height="280" src="{{img}}"></a>
+		{% endfor %}
+		<br>
+		{% if item.comments %}
+			<h3>Komentáře</h3>
+			{% for comment in item.comments %}
+				<blockquote>
+					{{comment.from.name}}:
+					{{comment.message}}
+				</blockquote>
+			{% endfor %}
+		{% endif %}
+		<hr>
+	{% endfor %}
+
+	<br>
+
+	<h3 class="center">
+		<a target="_blank" href="https://www.facebook.com/zivotbezkrutostinastatku/">Další příspěvky najdete na naší stránce na Facebooku &raquo;</a>
+	</h3>
+
+
+{% endblock %}

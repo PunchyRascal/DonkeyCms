@@ -1,0 +1,43 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>Ankety</h1>
+
+	<div id="adminButtons">
+		<a href="/?p=admin&amp;action=pollEdit" class="btn btn-success">Přidat anketu</a>
+	</div>
+
+	<table class='table table-striped'>
+		<tr>
+			<th class="col-md-4">otázka</th>
+			<th class="col-md-2">odpovědi</th>
+			<th class="col-md-3"></th>
+		</tr>
+
+		{% for item in items %}
+			<tr>
+				<td>{{ item.question }}</td>
+				<td>
+					{{ item.ans1 }}<br>
+					{{ item.ans2 }}<br>
+					{{ item.ans3 }}<br>
+					{{ item.ans4 }}<br>
+					{{ item.ans5 }}
+				</td>
+				<td>
+					<div class="btn-group">
+						<a class="btn btn-default" href='/?p=admin&amp;action=pollEdit&amp;id={{ item.id }}'>Editovat</a>
+						<a class="btn btn-warning" onclick="CheckDelete('action=polls&amp;del_ank=1&amp;id={{ item.id }}')">Smazat</a>
+						{% if item.active %}
+							<a class="btn btn-success" title="Deaktivovat!" href="/?p=admin&amp;action=polls&amp;set_ank_active=off&amp;id={{ item.id }}">Aktivní</a>
+						{% else %}
+							<a class="btn btn-default" title="Aktivovat!" href='/?p=admin&amp;action=polls&amp;set_ank_active=on&amp;id={{ item.id }}'>Neaktivní</a>
+						{% endif %}
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+<br>
+<br>
+
+<div class="row noPrint">
+	<div class="col-lg-6 col-lg-push-3">
+		<h3>Máte dotaz?</h3>
+	</div>
+</div>
+
+<form action="/?p=e-shop&amp;id={{ product.id }}" method="post" class="form-horizontal">
+
+	<div class="form-group">
+		<label for="fieldContact" class="col-lg-3 control-label">Kontakt</label>
+		<div class="col-lg-6">
+			<input placeholder="telefon, e-mail&hellip;" required class="form-control" type="text" name="contact" id="fieldContact" />
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="fieldText" class="col-lg-3 control-label">Dotaz</label>
+		<div class="col-lg-6">
+			<textarea class="form-control" required name="text" rows="3"></textarea>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-md-push-3 col-md-6">
+			<div class="g-recaptcha" data-sitekey="{{ common.recaptchaSiteKey }}"></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-lg-6 col-lg-push-3">
+			<input class="btn btn-info" type="submit" name="itemQuery" value="Odeslat dotaz" />
+		</div>
+	</div>
+
+
+	<input type="hidden" name="product" value="{{ product.cat_name }} &nbsp;&nbsp; {{ product.name }} ({{ product.price - product.discount }} Kč)" />
+	<input type="hidden" name="link" value="{{ common.appUrl }}/?p=e-shop&amp;id={{ product.id }}" />
+	<input type="hidden" name="id" value="{{ product.id }}" />
+</form>
+
+<br />
+<br />
+<div class="fb-like" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+<br />
+<br />

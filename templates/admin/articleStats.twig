@@ -1,0 +1,19 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<table>
+		{% for item in items %}
+			<tr>
+				<td>
+					<a href='/?p=art&amp;aid={{ item.id }}'>{{ item.heading }}</a>
+					<br>
+					<span class='nobr'>{{ item.date|date }}</span> {{ item.views }} zhlédnutí
+				</td>
+				<td><div class="bar" style="width: {{ (item.views / (max / 100)) * 3 }}px"></div></td>
+			</tr>
+		{% endfor %}
+
+	</table>
+
+{% endblock %}

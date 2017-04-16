@@ -1,0 +1,39 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>Stránky</h1>
+
+	<div id="adminButtons">
+		<a href="/?p=admin&amp;action=pageEdit" class="btn btn-success">Přidat stránku</a>
+	</div>
+
+	{% include 'base/pager.twig' %}
+
+	<table class='table table-striped'>
+		<tr>
+			<th>název</th>
+			<th>url</th>
+			<th>datum změny</th>
+			<th>aktivní</th>
+			<th></th>
+		</tr>
+
+		{% for item in items %}
+			<tr>
+				<td>
+					<a target="_blank" href="/about/{{item.url}}">{{ item.name }}</a>
+				</td>
+				<td><div class="notice">{{ item.url }}</div></td>
+				<td class='nobr'>{{ item.modified|datetime }}</td>
+				<td>{{ item.active ? '✅' : '❌' }}</td>
+				<td>
+					<a href='/?p=admin&amp;action=pageEdit&amp;id={{ item.id }}' class='btn btn-default'>editovat</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+	{% include 'base/pager.twig' %}
+
+{% endblock %}

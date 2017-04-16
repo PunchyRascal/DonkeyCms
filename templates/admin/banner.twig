@@ -1,0 +1,32 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>Změna banneru hlavičky webu</h1>
+
+	<br>
+	<br>
+
+	<form action="/?p=admin&amp;action=banner" enctype="multipart/form-data" method="post" class="form-horizontal">
+
+		<div class="form-group">
+			<label for="availability_days" class="col-sm-2 control-label">Banner</label>
+			<div class="col-sm-10">
+				<input type="file" name="banner_file" />
+				<span class="help-block">Nový banner: JPG, šířka 1000 px</span>
+				<input class="btn btn-primary btn-lg" type="submit" name="banner_submit" value="Uložit" />
+			</div>
+		</div>
+
+	</form>
+
+	<br>
+	<br>
+
+	<p>
+		<a href="?p=admin&amp;action=banner&amp;banner_reset=1" class="btn btn-default btn-xs">Obnovit základní banner</a>
+	</p>
+
+	<p>Po odeslání stisknout <kbd>F5</kbd></p>
+
+{% endblock %}

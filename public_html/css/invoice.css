@@ -1,0 +1,74 @@
+body {
+	font-size: 14px;
+	font-family: sans-serif;
+	width: 210mm;
+	height: 297mm;
+	margin: 0 auto;
+	box-sizing: border-box;
+	padding: 5mm;
+}
+
+img {
+	height: 3em;
+	float: right;
+	margin: 0 0 4mm 0
+}
+
+h1 {
+	margin: 0 0 4mm 0;
+	padding: 0;
+	font-size: 3em;
+}
+
+div.box1 {
+	width: 50%;
+	height: 8cm;
+	float: left;
+	border: 1px solid #000;
+	padding: 4mm;
+	box-sizing: border-box;
+}
+
+#buyer {
+	border-left: none;
+}
+
+.clear {
+	clear: both;
+}
+
+div.box2 {
+	border: 1px solid #000;
+	border-top: none;
+	padding: 4mm;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 1cm 0 0 0;
+	width: 100%;
+}
+
+table td, table th {
+	border: 1px solid #000;
+	padding: 2mm;
+}
+
+table th {
+	font-weight: bold;
+	text-align: left;
+}
+
+td.num, td.num span {
+	text-align: right;
+	white-space: nowrap;
+}
+
+tr.sum {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+tr.sum td {
+	width: 150px;
+}

@@ -1,0 +1,114 @@
+{% extends "base/layout.twig" %}
+
+{% block content %}
+
+	<ol class="breadcrumb">
+		<li><a href="/?p=e-shop">E-shop</a></li>
+		{% if product.parentName %}
+			<li><a href='/?p=e-shop&amp;cat={{ product.parentId }}' >{{ product.parentName }}</a></li>
+		{% endif %}
+		<li><a href='/?p=e-shop&amp;cat={{ product.cat_id }}'>{{ product.cat_name}}</a></li>
+		<li class="active">{{ product.name}}</li>
+	</ol>
+
+	<div id='productDetail' class="editObject" data-edit-action="e_item_edit" data-edit-id="{{ product.id }}">
+
+		<a data-product-name="{{ product.name }}" data-product-id="{{ product.id }}" class="addToFavorites noPrint">
+			<span class="glyphicon glyphicon-star"></span>
+			<span class="text"></span>
+		</a>
+
+		<h1>
+			{{ product.name }}
+		</h1>
+
+		<div class="image">
+
+			{% if product.image_url %}
+				<a class=viewPhoto href='/pimage/{{ product.id }}'>
+				<img src='/pimage/{{ product.id }}' alt='{{ product.name }}' /></a>
+			{% endif %}
+
+			{% for row in productImages %}
+				<a class=viewPhoto href='/upload/product/{{row.home_art}}_{{row.art_img_count}}.{{row.extension}}'>
+				<img src='/upload/product/{{row.home_art}}_{{row.art_img_count}}.{{row.extension}}' alt='' /></a>
+			{% endfor %}
+
+		</div>
+
+		<br>
+
+		<table class='table table-striped'>
+			<tr>
+				<td>Výrobce</td>
+				<td>{{ product.make }}</td>
+			</tr>
+			<tr>
+				<td>Dostupnost</td>
+				<td class='important {{ product.stock ? 'green' : 'red' }}'>
+					{% if product.availability == '' %}
+						{{ product.stock ? 'ihned' : 'neznámá' }}
+					{% else %}
+						{{ product.availability }}
+					{% endif %}
+					({{ product.stock }} ks)
+				</td>
+			</tr>
+
+			{% if product.discount %}
+				<tr>
+					<td>Původní cena</td>
+					<td>
+						<span class='strike'>{{ product.price|number_format }} Kč</span>
+						(sleva {{ (product.discount / (product.price / 100))|number_format }} %)
+					</td>
+				</tr>
+			{% endif %}
+
+			<tr class="small text-muted">
+				<td>Číslo produktu</td>
+				<td>
+					{{ product.id }}
+				</td>
+			</tr>
+
+			<tr class="text-important">
+				<td></td>
+				<td>
+					<span title='cena vč. DPH'>
+						<strong>{{ (product.price - product.discount)|number_format }} Kč</strong>
+					</span>
+					<small>(vč. DPH)</small>
+
+					<form action="/" method="post" class="form-inline inline">
+						{% if product.variant %}
+							<select class="form-control" required name='variant'>
+							<option value=''>- varianta -</option>
+
+							{% for item in product.variant|split(',') %}
+								<option value='{{ item }}'>{{ item }}</option>
+							{% endfor %}
+							</select>
+						{% endif %}
+
+						<input type="hidden" class=small id="amount" value="1" name="amount" />
+						<input type="hidden" name="id" value="{{ product.id }}" />
+						<input type="hidden" name="p" value="kosik" />
+						<input class="btn btn-primary btn-lg" type="submit" name="buy_submit" value="Koupit" />
+					</form>
+
+				</td>
+			</tr>
+		</table>
+
+		<div class='description'>
+			{{ product.desc|raw|nl2br|raw }}
+		</div>
+
+		{% include 'product/queryForm.twig' %}
+
+	</div>
+
+	{% include 'product/richtextData.twig' %}
+
+{% endblock %}

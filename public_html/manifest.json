@@ -1,0 +1,22 @@
+{
+	"name": "Život bez krustosti",
+	"short_name": "Život bez krutosti",
+	"start_url": "/",
+	"scope": "/",
+	"display": "fullscreen",
+	"icons": [
+		{
+			"src": "/images/logo.png",
+			"sizes": "436x444",
+			"type": "image/png"
+		}
+	],
+	"background_color": "#000000",
+	"splash_screens": [
+		{
+			"src": "/images/logo.png",
+			"sizes": "436x444",
+			"type": "image/png"
+		}
+	]
+}

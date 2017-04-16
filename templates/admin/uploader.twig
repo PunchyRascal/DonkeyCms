@@ -1,0 +1,91 @@
+{% extends "admin/base.twig" %}
+
+{% block head %}{% endblock %}
+{% block left %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block bodyClass %}empty{% endblock %}
+
+{% block fullContent %}
+
+<div id="uploadery">
+
+	<div class="toolbar">
+
+		<h1>Správce souborů</h1>
+
+		<form class="inline" action="/?p=admin&amp;action=uploader" enctype="multipart/form-data" method="post">
+			<input class="btn btn-default" type="file" name="files[]" id="uploaderInput" multiple />
+			<input type="hidden" name="folder" value="{{currentFolder}}" />
+			<input class="btn btn-primary" type="submit" name="filesSubmit" value="Nahrát soubor(y)" />
+		</form>
+	</div>
+
+		<div class="folders">
+			<h3>Složky</h3>
+
+			<div class="showMe">
+				<button class="shower"><span class="glyphicon glyphicon-plus"></span></button>
+				<div class="toShow">
+					<form class="form-inline inline" action="/?p=admin&amp;action=uploader" method="post">
+						<input size="10" class="form-control" type="text" name="dirName" placeholder="složka" />
+						<input class="btn btn-success" type="submit" name="createDir" value="Vytvoř" />
+					</form>
+				</div>
+			</div>
+
+			<ul>
+				<li>
+					<a href="/?p=admin&amp;action=uploader">
+						<span class="glyphicon glyphicon-folder-open"></span>
+						Hlavní složka</a>
+					<ul>
+						{% for item in folders %}
+							<li class="{{ currentFolder == item.filename ? 'active' }}">
+								<a href="/?p=admin&amp;action=uploader&amp;folder={{item.filename}}">
+									<span class="glyphicon glyphicon-folder-open"></span>
+									{{item.filename}}</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<div class="files">
+
+			{% include 'base/pageMessage.twig' %}
+
+			{% for item in files %}
+				<div class="adminImage">
+
+					{% if item.extension == 'jpg' or item.extension == 'png' %}
+						<a class="viewPhoto" href="/upload/{{path}}{{ item.filename }}">
+							<img src="/upload/{{path}}thumbs/{{ item.filename }}">
+						</a>
+					{% else %}
+						<a target="_blank" href="/upload/{{path}}{{ item.filename }}">
+							{{ item.filename }}
+						</a>
+					{% endif %}
+
+					<button class="btn btn-primary btn-block" data-src="/upload/{{path}}{{ item.filename }}">Vybrat</button>
+				</div>
+			{% endfor %}
+
+			<script>
+				$('.adminImage button').on('click', function () {
+					window.opener.postMessage({src: $(this).data('src')}, '*');
+					window.close();
+				});
+			</script>
+
+			<div class="clear"></div>
+		</div>
+
+	</div>
+
+	<div class="center">
+		<button class="closeWindow btn btn-default">Zavřít správce</button>
+	</div>
+
+{% endblock %}

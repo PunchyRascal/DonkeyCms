@@ -1,0 +1,96 @@
+{% extends "base/layout.twig" %}
+
+{% block content %}
+
+	<div id="articleDetail" class="editObject" data-edit-action="artEdit" data-edit-id="{{ art.id }}">
+
+		<h1 class='center' class='clear'>{{ art.heading }}</h1>
+
+		<img class="mainImage" src='/upload/article/{{ art.id }}_1.jpg' />
+
+		{{ art.teaser|entity_decode|raw }}
+		{{ art.art|entity_decode|raw }}
+
+		<div class='notice'>
+			<br>
+			zobrazeno {{ art.views }}&times; | {{ art.date|date }}
+			| Napsal {{ art.author }}
+		</div>
+
+		<br />
+		<div class="fb-like" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+		<br />
+		<br />
+
+		<a id='fotky'></a><div class='clear'></div>
+
+		{% for item in images %}
+			<div class='foto_fixbox'>
+				<a class=viewPhoto href='/upload/article/{{ item.home_art }}_{{ item.art_img_count }}.{{ item.extension }}'><img src='/upload/article/T/{{ item.home_art }}_{{ item.art_img_count }}.{{ item.extension }}' alt='' /></a>
+			</div>
+		{% endfor %}
+
+		<div class='clear'></div>
+
+		{% if art.enable_discussion %}
+			<a id="comments"></a>
+
+			<div class="row">
+				<div class="col-md-push-3 col-md-6">
+					<h3>Přidat poznámku</h3>
+				</div>
+			</div>
+
+			<form action="/?p=art" method="post" class="form-horizontal">
+
+				<div class="form-group">
+					<label for="fieldName" class="col-sm-3 control-label">Vaše jméno</label>
+					<div class="col-sm-6">
+						<input class="form-control" name="name" id="fieldName" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="fieldEmail" class="col-sm-3 control-label">E-mail</label>
+					<div class="col-sm-6">
+						<input class="form-control" type="email" name="email" id="fieldEmail" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="fieldSpam" class="col-sm-3 control-label">Zpráva</label>
+					<div class="col-sm-6">
+						<textarea class="form-control" name="text" rows="5"></textarea>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-md-push-3 col-md-6">
+						<div class="g-recaptcha" data-sitekey="{{ common.recaptchaSiteKey }}"></div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-push-3 col-md-6">
+						<input type="submit" class="btn btn-default" type="submit" name="commentSubmit" value="Odeslat" />
+					</div>
+				</div>
+
+				<input type="hidden" name="id" value="{{ art.id }}" />
+			</form>
+
+			<br>
+			<br>
+
+			{% for item in comments %}
+				<p>
+					<strong>{{ item.name }} :: {{ item.email }} :: {{ item.date|date }}</strong>
+					<br />
+					{{ item.text|nl2br }}
+				</p>
+				<hr />
+			{% endfor %}
+		{% endif %}
+	</div>
+
+{% endblock %}

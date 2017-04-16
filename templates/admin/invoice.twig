@@ -1,0 +1,96 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8">
+	<title>Faktura</title>
+	<link rel="stylesheet" href="/css/invoice.css">
+</head>
+<body>
+
+	<img src="/images/logo.png" alt="{{ common.appName }}">
+
+	<h1>Faktura č. {{ model.public_id }}</h1>
+
+	<p>K objednávce ze dne {{ model.submission_date|datetime }}</p>
+
+	<div class="box1" id="supplier">
+		<h4>Dodavatel</h4>
+		{{ common.appName }}
+		<br>
+		xxx
+		<br>
+		xxx
+		<br>
+		<br>
+		E-mail: {{ common.emailTo }}
+		<br>
+		Telefon: xxx
+		<br>
+		IČ: xxx
+		<br>
+		DIČ: xxxx
+		<br>
+		<br>
+		Variabilní symbol: {{ model.public_id }}
+	</div>
+
+	<div class="box1" id="buyer">
+		<h4>Odběratel</h4>
+
+		{{ model.name }}<br>
+		{{ model.street }}<br>
+		{{ model.zip }} {{ model.town }}<br><br>
+		E-mail: {{ model.email }}<br>
+		Telefon: {{ model.phone }}
+
+	</div>
+
+	<div class="clear"></div>
+
+	<div class="box2">
+		Způsob platby:
+		{{ model.getPaymentLabel() }}
+		<br>
+		Způsob dopravy:
+		{{ model.getPostageLabel()|striptags }}
+	</div>
+
+	<table>
+		<tr>
+			<th>Číslo výrobku</th>
+			<th>Objednané zboží</th>
+			<th>Ks</th>
+			<th>Cena / ks s DPH</th>
+			<th>DPH celkem</th>
+			<th>Celkem s DPH</th>
+		</tr>
+
+		{% for row in model.getItems() %}
+			<tr>
+				<td>{{ row.product_id }}</td>
+				<td>{{ row.product_name }}</td>
+				<td>{{ row.amount }}</td>
+				<td class=num><span class='nowrap'>{{ row.price|number_format(2) }} Kč</span></td>
+				<td class=num><span class='nowrap'>{{ row.vat_amount|number_format(2) }} Kč</span></td>
+				<td class=num><span class='nowrap'>{{ (row.price * row.amount)|number_format(2) }} Kč</span></td>
+			</tr>
+		{% endfor %}
+
+		<tr>
+			<th colspan=5>Doprava: {{ model.getPostageLabel()|striptags }}</th>
+			<td class=num>{{ model.getPostagePrice()|number_format(2) }} Kč</td>
+		</tr>
+		<tr>
+			<th colspan=5>Platba: {{ model.getPaymentLabel() }}</th>
+			<td class=num>{{ model.getPaymentPrice()|number_format(2) }} Kč</td>
+		</tr>
+		<tr>
+			<th colspan=5>DPH {{ model.vat_rate }} %</th>
+			<td class=num>{{ model.getVatSum()|number_format(2) }} Kč</td>
+		</tr>
+		<tr class=sum>
+			<th colspan=5>Celkem k úhradě</th>
+			<td class=num><span>{{ model.getGrandTotal()|number_format(2) }}&nbsp;Kč</span></td>
+		</tr>
+	</table>
+
+</body>

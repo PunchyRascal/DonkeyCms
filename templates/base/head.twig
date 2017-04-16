@@ -1,0 +1,24 @@
+<div id="Head" class="page{{common.pageId|capitalize}}">
+	<div class="inner">
+		<a class=banner href="/"><img src="/images/banner.png" /></a>
+		<div id=adminLink>
+			<a href="/?p=admin"><img src="/images/admin_s.gif" alt="Admin" /></a>
+		</div>
+    </div>
+</div>
+
+<div id="Menu">
+	<div class="inner">
+		{% spaceless %}
+			<a href="/" class="{{ common.pageId == '' ? "current" : '' }}">home</a>
+			<a href="/?p=novinky" class="eshop {{ common.pageId == 'novinky' ? "current" : '' }}">novinky</a>
+			<a href="/about/kdo-jsme" class="{{ common.pageId == 'pageKdo-jsme' ? "current" : '' }}">kdo jsme</a>
+			<a href="/?p=e-shop" class="eshop {{ common.pageId == 'e-shop' ? "current" : '' }}">e-shop</a>
+			<a href="/about/chci-pomahat"  {{ common.pageId == 'pageChci-pomahat' ? "class=current" : '' }}>chci pomáhat</a>
+			<a href="/?p=obyvatele"  {{ common.pageId == 'obyvatele' ? "class=current" : '' }}>obyvatelé</a>
+			<a href="/?p=kontakt" {{ common.pageId == 'kontakt' ? "class=current" : '' }}>kontakt</a>
+		{% endspaceless %}
+	</div>
+</div>
+
+<script src='https://www.google.com/recaptcha/api.js'></script>

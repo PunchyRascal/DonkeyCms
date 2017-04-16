@@ -1,0 +1,13 @@
+{% extends "base/layout.twig" %}
+
+{% block content %}
+
+	{% if pageTitle %}
+		<h1>{{pageTitle}}</h1>
+	{% endif %}
+
+	{% include 'parts/articleList.twig' %}
+
+	{% include 'base/pager.twig' %}
+
+{% endblock %}

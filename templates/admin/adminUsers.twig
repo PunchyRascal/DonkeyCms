@@ -1,0 +1,41 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>Uživatelé admina</h1>
+
+	<div id="adminButtons">
+		<a href="/?p=admin&amp;action=adminUserEdit" class="btn btn-success">Přidat uživatele</a>
+	</div>
+
+	<table class='table table-striped'>
+		<tr>
+			<th>login</th>
+			<th>vytvořen<br>poslední přihlášení</th>
+			<th>aktivní</th>
+			<th></th>
+		</tr>
+
+		{% for item in items %}
+			<tr>
+				<td>{{ item.login }}</td>
+				<td class='nobr'>
+					{{ item.creation_date|datetime }}
+					<br>
+					{{ item.last_login_date ? item.last_login_date|datetime : '-' }}
+				</td>
+				<td><span class="{{item.active ? 'glyphicon glyphicon-ok' : 'glyphicon glyphicon-ban-circle'}}"></span></td>
+				<td colspan='3' class="col-md-4">
+					<div class='btn-group pull-right'>
+						<a href='/?p=admin&amp;action=adminUserEdit&amp;id={{ item.id }}' class='btn btn-default'>editovat</a>
+						<form class="inline" method=post action="/?p=admin&action=adminUsers">
+							<input type="submit" onclick="return confirm('Opravdu smazat?')" class='btn-last btn btn-warning' value="smazat">
+							<input type="hidden" value="{{ item.id }}" name="deleteId">
+						</form>
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+{% endblock %}

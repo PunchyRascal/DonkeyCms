@@ -1,0 +1,11 @@
+/cache
+/tests/**/output/*
+/nbproject
+/public_html/images/norco_banner2.jpg
+/docs/*
+/config.json
+/auth.json
+/vendor
+tests/_output/*
+/.idea
+/public_html/upload/legacy/*

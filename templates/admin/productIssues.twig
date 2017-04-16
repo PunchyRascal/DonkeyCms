@@ -1,0 +1,45 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>Chyby v produktech</h1>
+
+	<ul class="nav nav-tabs">
+		<li class="{{ currentTab == 'duplicates' ? 'active' }}">
+			<a href="/?p=admin&amp;action=productIssues">Duplicity</a>
+		<li class="{{ currentTab == 'noPrice' ? 'active' }}">
+			<a href="/?p=admin&amp;action=productIssues&amp;type=noPrice">Nulová cena</a>
+		<li class="{{ currentTab == 'noCategory' ? 'active' }}">
+			<a href="/?p=admin&amp;action=productIssues&amp;type=noCategory">Bez kategorie</a>
+	</ul>
+
+	<br>
+
+	{% if items|length == 0 %}
+		<div class="messageOk">Tady je to OK :)</div>
+	{% endif %}
+
+	<table class="table table-striped">
+		{% for item in items %}
+			<tr>
+				<td>
+					{{ item.name }}
+					<div class="notice">
+						{{ item.catParentName }}
+						{{ item.catParentName ? '&raquo;' }}
+						{{ (item.catName|e ?: '<em>bez kategorie</em>'|raw)|raw }}
+					</div>
+				</td>
+				<td>{{ (item.price - item.discount)|number_format }} Kč</td>
+				<td>
+					<a target="_blank" class="btn btn-default" href="/?p=admin&amp;action=e_items&amp;name={{ item.name|url_encode }}">Zobrazit produkt(y)</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+	{% if extraCount > 0 %}
+		<div class="messageInfo">a {{ extraCount }} dalších...</div>
+	{% endif %}
+
+{% endblock %}

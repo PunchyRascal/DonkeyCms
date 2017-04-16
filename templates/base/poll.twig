@@ -1,0 +1,19 @@
+<h3>anketa</h3>
+
+<div class='e_poll'>
+	<div class='quest'>{{ poll.question }}</div>
+	{% for option in poll.options %}
+		{% if poll.canVote %}
+			<a
+				onclick="window.location.href = $(this).data('url')"
+				data-url="{{ option.url }}">{{ option.label }}</a>
+		{% else %}
+			{{ option.label }}
+		{% endif %}
+		<div class='progress'>
+			<div class='progress-bar' style='width: {{ option.barWidth }}px'>{{ option.percent }}&nbsp;%</div>
+		</div>
+	{% endfor %}
+
+	<p>celkem {{ poll.allVotesCount }} hlasů</p>
+</div>

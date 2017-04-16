@@ -1,0 +1,16 @@
+{% for item in articles %}
+	<div class='art_li editObject' data-edit-action="artEdit" data-edit-id="{{ item.id }}">
+
+		{% if item.image_count %}
+			<div class='aleft clearr'><a href='/?p=art&amp;aid={{ item.id }}'><img src="/upload/article/T/{{ item.id }}_1.jpg" alt="{{ item.heading }}"></a></div>
+				{% endif %}
+
+		<div class='art_heading'>
+			<a href='/?p=art&amp;aid={{ item.id }}'>{{ item.heading }}</a>
+		</div>
+
+		{{ item.teaser|entity_decode|raw }}
+
+		<div class='clearall'></div>
+	</div>
+{% endfor %}

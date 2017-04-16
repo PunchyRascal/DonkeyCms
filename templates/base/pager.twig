@@ -1,0 +1,25 @@
+{% if paging and (paging.previous or paging.numbers or paging.next)  %}
+	<nav>
+		<ul class=pagination>
+			{%- if paging.previous -%}
+				<li class="previousPage"><a href="{{ paging.previous }}">&laquo; Předchozí</a></li>
+			{%- else -%}
+				<li class="previousPage disabled"><a>&laquo; Předchozí</a></li>
+			{%- endif -%}
+
+			{% for link in paging.numbers -%}
+				{%- if link.isEtc -%}
+					<li class="numPage disabled"><a>&hellip;</a></li>
+				{%- else -%}
+					<li class="numPage {{ link.isActive ? 'active' }}"><a href="{{ link.url }}">{{ link.label }}</a></li>
+				{%- endif -%}
+			{%- endfor %}
+
+			{%- if paging.next -%}
+				<li class="nextPage"><a class="t-nextPageLink" href="{{ paging.next }}">Další stránka &raquo;</a></li>
+			{%- else -%}
+				<li class="nextPage disabled"><a>Další stránka &raquo;</a></li>
+			{%- endif -%}
+		</ul>
+	</nav>
+{% endif %}

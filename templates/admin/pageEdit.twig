@@ -1,0 +1,48 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>Upravit stránku</h1>
+
+	<form action="/" method="post" enctype="multipart/form-data" class="form-horizontal">
+
+		<div class="form-group">
+			<label for="name" class="col-sm-2 control-label">Název</label>
+			<div class="col-sm-10">
+				<input class="form-control" type="text" name="name" value="{{ item.name }}" id="name" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="fieldUrl" class="col-sm-2 control-label">URL</label>
+			<div class="col-sm-10">
+				<input class="form-control" type="text" name="url" value="{{ item.url }}" id="fieldUrl" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="active" value="1" id="active" {{ item.active ? 'checked' }} />
+						Aktivní
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<textarea name="text" cols="92" rows="40" class="wysiwyg">{{ item.text }}</textarea>
+
+		<div class="clear"><br></div>
+
+		<div class="text-center">
+			<input class="btn btn-primary btn-lg" type="submit" name="pageEditSubmit" value="Uložit" />
+		</div>
+
+		<input type="hidden" name="id" value="{{ item.id }}" />
+		<input type="hidden" name="p" value="admin" />
+		<input type="hidden" name="action" value="pageEdit" />
+
+	</form>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{% if page.name %}
+	<h1>{{ page.name }}</h1>
+{% endif %}
+
+<div class="editObject" data-edit-action="pageEdit" data-edit-id="{{ page.id }}">
+    {{ page.text|raw }}
+</div>
+
+
+

@@ -1,0 +1,99 @@
+<!doctype html>
+	<html lang="cs" class="{% block bodyClass %}{% endblock %}">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="verify-v1" content="" />
+		<meta name="msvalidate.01" content="" />
+		<title>
+			{{pageTitle}}{{pageTitle ? ' - ' }}
+			{{common.appName}}
+		</title>
+
+		<link rel="alternate" type="application/rss+xml" href="/rss.php" title="Články" />
+		<link rel="alternate" type="application/rss+xml" href="/rss-news.php" title="Novinky" />
+		<link rel="shortcut icon" href="/images/favicon.png" />
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+		<script type="text/javascript" src="/js/jquery.cookie.js"></script>
+		<script type="text/javascript" src="/js/main.js?v=7"></script>
+		<link media="print" rel="stylesheet" href="/css/print.css" />
+		<link media="screen" rel="stylesheet" href="/css-less/main.css?v=29" />
+		<link rel="stylesheet" href="/css-less/small.css?v=8" media="(max-width: 1000px)" />
+		<link rel="apple-touch-icon" href="/images/shortcut.png">
+		<link rel="apple-touch-icon-precomposed" href="/images/shortcut.png">
+		<link rel="apple-touch-startup-image" href="/images/shortcut.png">
+		<meta name="mobile-web-app-capable" content="yes">
+		<link rel="icon" sizes="436x444" href="/images/logo.png">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="manifest" href="/manifest.json">
+		{% for tag, value in openGraphMeta if openGraphMeta %}
+			<meta property="og:{{ tag }}" content="{{ value }}" />
+		{% endfor %}
+		<meta property="fb:app_id" content="1008973135865620">
+		<meta property="fb:profile_id" content="199643240062496">
+	</head>
+	<body class="{{ common.showEditLink ? 'showEditLink' }}">
+
+		{% if openGraphMeta %}
+			<div id="fb-root"></div>
+			<script>(function(d, s, id) {
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (d.getElementById(id)) return;
+				js = d.createElement(s); js.id = id;
+				js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.6";
+				fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));</script>
+		{% endif %}
+
+		{% if common.pageId != 'admin' and common.facebookPageUrl %}
+			<a id="facebookSidelink" href="{{common.facebookPageUrl}}" target="_blank">
+				<img src="/images/facebook-vertical.png" alt="Facebook" />
+			</a>
+		{% endif %}
+
+		{% block head %}
+			{% include 'base/head.twig' %}
+		{% endblock %}
+
+		{% if common.googleAnalyticsId %}
+			<script>
+				(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+				})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+				ga('create', '{{common.googleAnalyticsId}}', 'auto');
+				ga('send', 'pageview');
+			</script>
+		{% endif %}
+
+		{% block fullContent %}
+			<div id=widthHolder>
+				<div id="Content" class="{{ common.pageId }}">
+					<a id="contet_top"></a>
+					<div class="container">
+						{% include 'base/pageMessage.twig' %}
+						{% block content %}{% endblock %}
+						<div class="clear"></div>
+						<br>
+					</div>
+				</div>
+
+				{% block left %}
+					{% include 'base/left.twig' %}
+				{% endblock %}
+
+				<div class=clear></div>
+			</div>
+		{% endblock %}
+
+		{% block footer %}
+			{% include 'base/footer.twig' %}
+		{% endblock %}
+
+		<div id="photoViewer"></div>
+		<div id="overlay"></div>
+
+		<script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/signup-forms/popup/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script>
+		<script type="text/javascript">require(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us15.list-manage.com","uuid":"121c37bb330c8e3a2a3110174","lid":"30bfaa4592"}) })</script>
+	</body>
+</html>

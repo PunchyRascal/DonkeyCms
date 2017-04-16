@@ -1,0 +1,18 @@
+<script type="application/ld+json">
+	{
+		"@context": "http://schema.org/",
+		"@type": "Product",
+		"name": "{{ product.name }}",
+		"image": "{{ openGraphMeta.image }}",
+		"description": "{{ product.desc|striptags }}",
+		"sku": "{{ product.id }}",
+		"brand": {
+			"name": "{{ product.make }}"
+		},
+		"offers": {
+			"@type": "Offer",
+			"priceCurrency": "CZK",
+			"price": "{{ product.price - product.discount }}"
+		}
+	}
+</script>

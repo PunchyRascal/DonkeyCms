@@ -1,0 +1,156 @@
+{% extends "admin/basev2.twig" %}
+
+{% block content %}
+
+	<h1>
+		Objednávka č. {{ model.public_id }}
+		<a target=_blank href='/?p=admin&amp;action=showInvoice&amp;id={{ model.id }}'>
+			<img height=24 src='/images/invoice.jpg' alt=faktura class="middle"></a>
+	</h1>
+
+	<div class="col-xs-6">
+		<table summary='Kontaktní a fakturační údaje' class='items table-condensed'>
+			<tr>
+				<th>datum objednání</th>
+				<td>{{ model.submission_date|datetime }}</td>
+			</tr>
+			<tr>
+				<th>jméno</th>
+				<td>{{ model.name }}</td>
+			</tr>
+			<tr>
+				<th>ulice</th>
+				<td>{{ model.street }}</td>
+			</tr>
+			<tr>
+				<th>město</th>
+				<td>{{ model.town }}</td>
+			</tr>
+			<tr>
+				<th>PSČ</th>
+				<td>{{ model.zip }}</td>
+			</tr>
+			<tr>
+				<th>e-mail</th>
+				<td><a href='mailto:{{ model.email }}'>{{ model.email }}</a></td>
+			</tr>
+			<tr>
+				<th>telefon</th>
+				<td><a href="tel:{{ model.phone }}">{{ model.phone }}</a></td>
+			</tr>
+			<tr>
+				<th>poznámka</th>
+				<td>{{ model.note ?: '-' }}</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="col-xs-6">
+		<div class='orderStatus alertId{{ model.getStatusAlertType() }}'>
+			<form action='/?p=admin&amp;action=e_orders' method='post'>
+				<input type="hidden" name="backUrl" value="/?p=admin&amp;action=orderDetail&amp;id={{ model.id }}">
+				<h3>
+					Stav:
+					<strong>
+						<span class='alert{{ model.getStatusAlertType() }}'>
+							{{ model.getStatusLabel() }}
+							{{ model.status_change_date ? '('~model.status_change_date|datetime~')' }}
+						</span>
+					</strong>
+				</h3>
+
+				<select class="autosubmit form-control" name="order_status">
+					<option value="1" {{ model.status == 1 ? 'selected' }}>Nová</option>
+					<option value="2" {{ model.status == 2 ? 'selected' }}>Čeká se</option>
+					<option value="3" {{ model.status == 3 ? 'selected' }}>Potvrzeno</option>
+					<option value="4" {{ model.status == 4 ? 'selected' }}>Odesláno</option>
+					<option value="5" {{ model.status == 5 ? 'selected' }}>Zrušeno</option>
+					<option value="6" {{ model.status == 6 ? 'selected' }}>Vráceno</option>
+				</select>
+
+				<textarea class="form-control" placeholder='tajná poznámka' name="order_status_note" cols="30" rows="5">{{ model.status_note }}</textarea>
+
+				<div class="text-right">
+					<input type="submit" value="Uložit" class="btn btn-default" />
+					<input type="hidden" name="orderStatusSubmit" value="1" />
+					<input type="hidden" name="currentStatus" value="{{ currentStatus }}" />
+				</div>
+
+				<input type="hidden" name="id" value="{{ model.id }}" />
+			</form>
+		</div>
+
+	</div>
+
+	<table class='table table-striped table-bordered'>
+		<tr>
+			<th>
+				položka
+				<form method="post" class="inline pull-right">
+					<input type="hidden" name="action" value="orderDetail">
+					<input type="hidden" name="id" value="{{ model.id }}">
+					<input type="hidden" name="p" value="admin">
+					<input type="hidden" name="addRow" value="1">
+					<input type="text" value="{{ addProductId }}" name="productId" placeholder="Číslo produktu">
+					{% if addVariants %}
+						<select class="form-control" required name='addVariant'>
+							<option value=''>- varianta -</option>
+							{% for item in addVariants %}
+								<option value='{{ item }}'>{{ item }}</option>
+							{% endfor %}
+						</select>
+					{% endif %}
+					<button class="btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span> přidat</button>
+				</form>
+			</th>
+			<th>cena</th>
+			<th>počet</th>
+			<th>(varianta)</th>
+			<th></th>
+		</tr>
+		{% for row in model.getItems() %}
+			<tr>
+				<td>
+					<a href='{{ common.appUrl }}/?p=e-shop&id={{ row.product_id }}'>{{ row.product_name }}</a>
+				</td>
+				<td class="number"><span class='nowrap'>{{ row.price|number_format }} Kč</span></td>
+				<td class="number">{{ row.amount }}</td>
+				<td>{{ row.variant }}</td>
+				<td>
+					<form method="post">
+						<input type="hidden" name="action" value="orderDetail">
+						<input type="hidden" name="id" value="{{ model.id }}">
+						<input type="hidden" name="p" value="admin">
+						<input type="hidden" name="removeRow" value="1">
+						<input type="hidden" name="itemId" value="{{ row.id }}">
+						<button class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-remove"></span> odstranit</button>
+					</form>
+				</td>
+			</tr>
+		{% endfor %}
+
+		<tr>
+			<td>
+				doprava:
+				{{ model.getPostageLabel()|raw }}
+			</td>
+			<td colspan="4" class=number>{{ model.price_delivery }} Kč</td>
+		</tr>
+
+		<tr>
+			<td>
+				platba:
+				{{ model.getPaymentLabel() }}
+			</td>
+			<td colspan="4" class=number>{{ model.price_payment }} Kč</td>
+		</tr>
+
+		<tr>
+			<td><strong>CELKEM</strong></td>
+			<td colspan='4' class="num"><strong>{{ model.price_total|number_format }} Kč</strong></td>
+		</tr>
+	</table>
+
+{% endblock %}
+
+

@@ -1,0 +1,178 @@
+{% extends "base/layout.twig" %}
+
+{% block content %}
+
+	<h1>Nákupní košík</h1>
+
+	{% if items %}
+
+		<table id="Cart" class='table'>
+			<tr>
+				<th colspan="2">produkt</th>
+				<th><span title='Cena po slevě'>cena</span></th>
+				<th>množství</th>
+				<th>&nbsp;</th>
+			</tr>
+
+			{% for item in items %}
+				<tr class="t-cart-item t-product-id-{{item.product_id}}">
+					<td class="middle">
+						<a href="?p=e-shop&amp;id={{ item.product_id }}">
+							<img width="64" src="/?p=resizeProductImage&amp;id={{ item.product_id }}&amp;maxWidth=64"></a>
+					</td>
+					<td class="middle">
+						<a href="?p=e-shop&amp;id={{ item.product_id }}">{{ item.product_name }}</a>
+						{% if item.variant %}
+							<br>varianta: {{ item.variant }}
+						{% endif %}
+					</td>
+					<td class='nowrap middle price'>
+						<strong>{{ (item.price * item.amount)|number_format }} Kč</strong>
+						{% if item.amount > 1 %}
+							<div class="text-muted">
+								{{ (item.price)|number_format }} Kč / ks
+							</div>
+						{% endif %}
+					</td>
+					<td class="nowrap middle">
+						<form method='post' class="inline">
+							<input type="hidden" name="re_amount" value="{{ item.amount - 1 }}">
+							<input type='hidden' name='item_id' value='{{ item.id }}'>
+							<button class="btn btn-sm btn-link t-decrease-amount" type="submit" title='Snížit počet'>
+								<span class="glyphicon glyphicon-minus ko"></span>
+							</button>
+						</form>
+						{{ item.amount }}
+						<form method='post' class="inline">
+							<input type="hidden" name="re_amount" value="{{ item.amount + 1 }}">
+							<input type='hidden' name='item_id' value='{{ item.id }}'>
+							<button class="btn btn-sm btn-link t-increase-amount" type="submit" title='Zvýšit počet'>
+								<span class="glyphicon glyphicon-plus ok"></span>
+							</button>
+						</form>
+					</td>
+					<td class="middle">
+						<form method='post' class="inline">
+							<input type="hidden" name="re_amount" value="0">
+							<input type='hidden' name='item_id' value='{{ item.id }}'>
+							<button class="close" type="submit" title='Odstranit'>×</button>
+						</form>
+					</td>
+				</tr>
+			{% endfor %}
+
+			<tr>
+				<td colspan=5 class=center>
+					{% if selectShowPrice %}
+						<br />Nakoupíte-li ještě za {{ remainsToSpend|number_format }} Kč, doprava a platba bude
+						<strong>ZDARMA</strong><br /><br />
+					{% else %}
+						<br />Doprava i platba je pro vás <strong>ZDARMA</strong><br /><br />
+					{% endif %}
+				</td>
+			</tr>
+		</table>
+
+		<div class="row paymentDeliveryForms">
+			<div class="col-xs-12 col-md-6">
+				<h3>Doprava</h3>
+
+				<form method="post" class="autosubmitForm">
+					{% for method in deliveryMethods %}
+						<div class="radio">
+							<label>
+								<input name="delivery" type="radio" {{ delivery == method.id ? 'checked' }} value='{{ method.id }}'>
+								{{ method.name }}
+								({{ selectShowPrice ? method.price : 0 }} Kč)
+							</label>
+						</div>
+					{% endfor %}
+
+					<noscript>
+						<input type=submit value=Uložit />
+					</noscript>
+				</form>
+
+				{% if delivery == 'zasilkovna' and showZasilkovna %}
+					<form action="/" method="post" class="autosubmitForm">
+						<input type="hidden" name="p" value="kosik">
+						<input type=hidden name=zasilkovna_save value=1>
+						<div class="packetery-branch-list list-type=3 connect-field=textarea[name=poznamka] country=cz"
+							 style="border: 1px dotted black;">
+							Načítání: seznam poboček osobního odběru
+							<script>
+								(function(d){
+									var el, id = "packetery-jsapi", head = d.getElementsByTagName("head")[0];
+									if(d.getElementById(id)) {
+										return;
+									}
+									el = d.createElement("script");
+									el.id = id;
+									el.async = true;
+									el.src = document.location.protocol + "//www.zasilkovna.cz/api/v2/1721005317ed7477/branch.js";
+									head.insertBefore(el, head.firstChild);
+								}(document));
+							</script>
+						</div>
+						{% if zasilkovnaSet %}
+							<div class="messageOk">Pobočka zvolena</div>
+						{% else %}
+							<div class="messageWarning">Zvolte pobočku</div>
+						{% endif %}
+					</form>
+				{% endif %}
+			</div>
+
+			<div class="col-xs-12 col-md-6">
+
+				<h3>Platba</h3>
+
+				<form method="post" class="autosubmitForm">
+					{% for method in paymentMethods %}
+						<div class="radio">
+							<label>
+								<input name="payment" type="radio" {{ payment == method.id ? 'checked' }} value='{{ method.id }}'>
+								{{ method.name }}
+								({{ selectShowPrice ? method.price : 0 }} Kč)
+							</label>
+						</div>
+					{% endfor %}
+
+					<noscript>
+						<input type=submit value=Uložit />
+					</noscript>
+				</form>
+
+			</div>
+		</div>
+
+		<br>
+
+		<p class="messageInfo text-important t-total-price">
+			<strong>CELKEM:&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+			<strong>
+				{{ (sum + postage + paymentPrice)|number_format }} Kč
+			</strong>
+			<small>(vč. DPH)</small>
+		</p>
+
+		<div class="text-right">
+			<form action="/" method="post" class="inline form-inline">
+				<input type="hidden" name="p" value="objednavka">
+				<input type="hidden" name="origin" value="startOrder">
+				<input type="submit" class="btn btn-lg btn-primary" value="Objednat &raquo;">
+			</form>
+		</div>
+
+		<p class="text-left"><a href="/?p=e-shop" class='button large'>&laquo; Pokračovat v nákupu</a></p>
+	{% else %}
+		<div class="alert alert-info">
+			Váš košík je zcela prázdný.
+		</div>
+
+		<p class="text-center">
+			<a href="/?p=e-shop" class='btn btn-primary'>Pokračovat v nákupu</a>
+		</p>
+	{% endif %}
+
+{% endblock %}

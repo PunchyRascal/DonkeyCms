@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+	<channel>
+		<title>{{common.appName }} - {{ title }}</title>
+		<link>{{common.appUrl}}</link>
+		<description>{{common.appDescription}}</description>
+		<webMaster>{{common.emailTo}}</webMaster>
+		<language>cs</language>
+		{% for item in items %}
+			<item>
+				<title>{{ item.heading|striptags }}</title>
+				<link>{{common.appUrl}}/?p=art&amp;aid={{ item.id }}</link>
+				<description>{{ item.teaser|striptags }}</description>
+				<pubDate>{{ item.date|date("D, d M Y H:i:s O") }}</pubDate>
+				<guid isPermaLink="false">{{common.appUrl}}_article_no_{{ item.id }}</guid>
+			</item>
+		{% endfor %}
+	</channel>
+</rss>

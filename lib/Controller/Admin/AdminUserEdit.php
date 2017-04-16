@@ -7,6 +7,9 @@ use PunchyRascal\DonkeyCms\Http;
 class AdminUserEdit extends Base {
 
 	public function execute() {
+		/**
+		 * @todo: handle duplicate login exception
+		 */
 		if (Http::getPost('adminUserEditSubmit')) {
 
 			$cols = $this->db->createParam('COLUMNS', [

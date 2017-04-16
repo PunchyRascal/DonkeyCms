@@ -1,0 +1,69 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>
+		Testování EET (lze libovolně zkoušet)
+	</h1>
+
+	<form action="/" method="post" class="form-inline">
+		<input class="form-control" type="number" name="amount" id="amount" placeholder="Částka" />
+		<input class="btn btn-primary btn-sm" type="submit"
+			   name="sendSale" value="Odeslat na Finanční správu" />
+		<input type="hidden" name="p" value="admin" />
+		<input type="hidden" name="action" value="eetSend" />
+	</form>
+
+	<br>
+
+	{% include 'base/pager.twig' %}
+
+	<table class='table table-striped'>
+		<tr>
+			<th>ID</th>
+			<th>částka</th>
+			<th>datum</th>
+			<th title="Fiskální identifikační kód/Bezpečnostní kód poplatníka">FIK / BKP</th>
+			<th title="Zda byla tržba v pořádku odeslána">odeslání</th>
+			<th title="Zda jde o testovací nebo ostrou transakci">ostrý mód</th>
+			<th></th>
+		</tr>
+
+		{% for item in items %}
+			<tr>
+				<td>{{ item.id }}</td>
+				<td>{{ item.amount }}&nbsp;Kč</td>
+				<td class='nobr'>{{ item.created_at|datetime }}</td>
+				<td>
+					<span title="FIK: {{ item.fik }}">{{ cut(item.fik ?: '-', 10)|raw }}</span>
+					<hr class="subtle">
+					<span title="BKP: {{ item.bkp }}">{{ cut(item.bkp ?: '-', 10)|raw }}</span>
+				</td>
+				<td><span class="{{ item.sent_ok ? 'green' : 'red' }}">{{ item.sent_ok ? '✔' : '✖' }}</span></td>
+				<td><span class="{{ item.verification_only ? 'red' : 'green' }}">{{ item.verification_only ? '✖' : '✔' }}</span></td>
+				<td>
+					<a title="Tisk účtenky" target="_blank" href="/?p=admin&amp;action=eetReceiptPrint&amp;id={{ item.id }}">
+						<img height="24" src="/images/invoice.jpg" alt="Účtenka" class="middle"></a>
+					{% if not item.fik %}
+						<form action="/" class="inline" method=post>
+							<input type="hidden" name="p" value="admin" />
+							<input type="hidden" name="action" value="eetSend" />
+							<input type="hidden" name="id" value="{{ item.id }}" />
+							<input type="hidden" name="sendSale" value="1" />
+							<button class="btn btn-xs {{ item.warn_time_is_up ? 'btn-danger' }}" title="{{ item.warn_time_is_up ? 'Čas (48h) na odeslání účtenky již vypršel' }}" type=submit>
+								<span class="glyphicon glyphicon-repeat"></span>
+								Odeslat znovu
+								{% if not item.warn_time_is_up %}
+									<span title="Zbývající čas na znovuodeslání účtenky (hodiny:minuty:sekundy)">({{ item.hours_left_to_resend }} )</span>
+								{% endif %}
+							</button>
+						</form>
+					{% endif %}
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+	{% include 'base/pager.twig' %}
+
+{% endblock %}

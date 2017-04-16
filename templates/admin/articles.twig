@@ -1,0 +1,44 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>Články</h1>
+
+	<div id="adminButtons">
+		<a href="/?p=admin&amp;action=artEdit" class="btn btn-success">Přidat článek</a>
+	</div>
+
+	{% include 'base/pager.twig' %}
+
+	<table class='table table-striped'>
+		<tr>
+			<th>článek</th>
+			<th>datum<br>sekce</th>
+			<th></th>
+		</tr>
+
+		{% for item in items %}
+			<tr>
+				<td><a href='/?p=art&amp;aid={{ item.id }}'>{{ item.heading }}</a></td>
+				<td class='nobr'>
+					{{ item.date|date }}
+					<br>
+					{{ cats[item.category] }}
+				</td>
+				<td colspan='3' class="col-md-4">
+					<div class='btn-group pull-right'>
+						<a href='/?p=admin&amp;action=artEdit&amp;id={{ item.id }}' class='btn btn-default'>editovat</a>
+						<a href='/?p=admin&amp;action=images&amp;id={{ item.id }}&amp;type=art' class='btn btn-info'>fotky</a>
+						<form class="inline" method=post action="/?p=admin&action=arts">
+							<input type="submit" onclick="return confirm('Opravdu smazat?')" class='btn-last btn btn-warning' value="smazat">
+							<input type="hidden" value="{{ item.id }}" name="deleteId">
+						</form>
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+	{% include 'base/pager.twig' %}
+
+{% endblock %}

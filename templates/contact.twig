@@ -1,0 +1,79 @@
+{% extends "base/layout.twig" %}
+
+{% block content %}
+
+	<script src="https://maps.googleapis.com/maps/api/js?key={{googleMapsKey}}&amp;v=3"></script>
+	<script>
+		$(document).ready(function() {
+			var myLatlng = new google.maps.LatLng(50.4363195, 15.7041468);
+			var mapOptions = {
+				zoom: 13,
+				center: myLatlng,
+				mapTypeId: google.maps.MapTypeId.ROADMAP,
+				gestureHandling: 'none',
+				scrollwheel: false
+			};
+			var map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+
+			new google.maps.Marker({
+				position: myLatlng,
+				map: map,
+				title: 'Statek bez krutosti'
+			});
+		});
+	</script>
+
+	{% include "page/text.twig" %}
+
+
+	<div class="clear"></div>
+	<br>
+
+	<div id="map_canvas"></div>
+
+	<a id="contactForm"></a>
+
+	<div class="row">
+		<div class="col-md-push-3 col-md-6">
+			<h3>Napište nám</h3>
+		</div>
+	</div>
+
+	<form action="/?p=prodejna" method="post" class="form-horizontal">
+
+		<div class="form-group">
+			<label for="fieldSpam" class="col-sm-3 control-label">Vaše jméno</label>
+			<div class="col-sm-6">
+				<input class="form-control" name="name" id="name" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="fieldSpam" class="col-sm-3 control-label">Kontakt na Vás</label>
+			<div class="col-sm-6">
+				<input class="form-control" name="email" id="email" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="fieldSpam" class="col-sm-3 control-label">Zpráva</label>
+			<div class="col-sm-6">
+				<textarea class="form-control" name="message" rows="5"></textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-push-3 col-md-6">
+				<div class="g-recaptcha" data-sitekey="{{ common.recaptchaSiteKey }}"></div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-push-3 col-md-6">
+				<input type="submit" class="btn btn-info" name="message_submit" id="message_submit" value="Odeslat" />
+			</div>
+		</div>
+
+	</form>
+
+{% endblock %}

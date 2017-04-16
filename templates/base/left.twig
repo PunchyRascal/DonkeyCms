@@ -1,0 +1,21 @@
+<div id="Left">
+
+	<div id="cartPlaceholder">
+		<noscript>
+			<div id="sideCart">
+				<a href="/?p=kosik" class="btn btn-success btn-lg">Košík</a>
+			</div>
+		</noscript>
+	</div>
+
+	<div id="catMenu" data-active-id="{{ common.currentCatId|int }}">
+		<div class="catMenu">
+			{{ common.sideCategories|raw }}
+		</div>
+	</div>
+
+	{% for poll in common.polls %}
+		{% include 'base/poll.twig' %}
+	{% endfor %}
+
+</div>

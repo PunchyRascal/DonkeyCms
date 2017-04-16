@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>
+			{{ pageTitle }} - {{ common.appName }}
+		</title>
+		<link rel="shortcut icon" href="/images/favicon.ico" />
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+		<script type="text/javascript" src="/js/jquery.cookie.js"></script>
+		<script type="text/javascript" src="/js/admin.js?v=1"></script>
+		<link media="screen" rel="stylesheet" href="/css-less/admin.css?v=1" />
+		<meta name="mobile-web-app-capable" content="yes">
+		<link rel="icon" sizes="192x192" href="/images/shortcut192.png">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="manifest" href="/manifest.json">
+	</head>
+	<body>
+		<div id="header">
+			<a href="/?p=admin">&laquo; Admin</a>
+		</div>
+		<div class="container-fluid"
+			<div class="row">
+				{#<div class="col-md-2">
+					<ul id="mainMenu" class="nav nav-pills nav-stacked nav-justified">
+						<li class="active">
+							<a href="/?p=admin&amp;action=e_orders">« Objednávky</a>
+						</li>
+					</ul>
+				</div>#}
+				<div>
+					{% include 'base/pageMessage.twig' %}
+					{% block content %}{% endblock %}
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

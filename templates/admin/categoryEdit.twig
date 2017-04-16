@@ -1,0 +1,70 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>Upravit/vložit kategorii</h1>
+
+	<form action="/" method="post" class="form-horizontal">
+
+		<div class="form-group">
+			<label for="name" class="col-sm-2 control-label">Název</label>
+			<div class="col-sm-10">
+				<input class="form-control" type="text" name="name" value="{{ item.name }}" id="name" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="active" value="1" id="active" {{ item.active ? 'checked' }} />
+						Aktivní
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="sequence" class="col-sm-2 control-label">Pořadí</label>
+			<div class="col-sm-10">
+				<input class="form-control" type="number" name="sequence" value="{{ item.sequence }}" id="sequence" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="fieldImage" class="col-sm-2 control-label">Obrázek</label>
+			<div class="col-sm-7">
+				<input class="form-control" type="text" name="image_url" value="{{ item.image_url }}" id="fieldImage" />
+				<br>
+				<img src="{{ item.image_url ?: 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=' }}" width=120>
+			</div>
+			<div class="col-sm-3">
+				<a class="btn btn-default openUploader" data-url-target="fieldImage">Vybrat obrázek</a>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="sequence" class="col-sm-2 control-label">Nadřazená kategorie</label>
+			<div class="col-sm-10">
+				<div class=referenceContainer>
+					<div class=referenceSelected>
+						<span class=name>{{ item.parentName }}</span>
+						<input type="hidden" name="parent_cat" value="{{ item.parent_cat }}" />
+					</div>
+					<div class="referenceSelector">
+						<div class=catMenu data-line-content="{{ lineContent|escape('html_attr') }}">{{ cats|raw }}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="text-center">
+			<input class="btn btn-primary btn-lg" type="submit" name="catEditSubmit" value="Uložit" id="cat_edit_submit" />
+		</div>
+
+		<input type="hidden" name="id" value="{{ item.id }}" />
+		<input type="hidden" name="action" value="cat_edit" />
+		<input type="hidden" name="p" value="admin" />
+	</form>
+
+{% endblock %}

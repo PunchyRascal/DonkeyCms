@@ -1,0 +1,6 @@
+User-agent: *
+Disallow:
+Request-rate: 1/8s
+
+User-Agent: MJ12bot
+Crawl-Delay: 20

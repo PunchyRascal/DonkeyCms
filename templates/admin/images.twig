@@ -1,0 +1,47 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1><a href='/?p={{ item.p }}&amp;aid={{ itemId }}&amp;id={{ itemId }}'><strong>{{ item.name }}</strong></a></h1>
+
+	<form class="row" action="/" method="post" enctype="multipart/form-data">
+
+		<div class="col-sm-4">
+			Hlavní obrázek: <input accept="image/jpeg" type="file" name="mainImage" />
+		</div>
+
+		<div class="col-sm-4">
+			Další obrázky <input multiple accept="image/jpeg" type="file" name="moreImages[]" />
+		</div>
+
+		<div class="col-sm-4">
+			<input class="btn btn-primary" type="submit" id="art_img_up_submit" value="Nahrát" name="imagesSubmit" />
+		</div>
+
+		<input type="hidden" name="p" value="admin" />
+		<input type="hidden" name="action" value="images" />
+		<input type="hidden" name="type" value="{{ type }}" />
+		<input type="hidden" name="id" value="{{ itemId }}" />
+	</form>
+
+	<hr class="clearfix">
+
+	{% for item in images %}
+		<div class='foto_fixbox'>
+			<div class="tools">
+				{{ item.art_img_count == 1 ? "<span title='Hlavní obrázek' class=marker>★</span>" }}
+				<form method="post" action="/?p=admin&amp;action=images">
+					<input type=submit class="btn btn-danger btn-xs" onclick="return confirm('Opravdu smazat?')" value="Smazat">
+					<input type="hidden" name="delete" value="1">
+					<input type="hidden" name="type" value="{{ type }}">
+					<input type="hidden" name="id" value="{{ item.home_art }}">
+					<input type="hidden" name="index" value="{{ item.art_img_count }}">
+				</form>
+			</div>
+			<a class=viewPhoto href="/{{ dirName }}/{{ item.home_art }}_{{ item.art_img_count }}.{{ item.extension }}">
+				<img src="/{{ dirName }}/T/{{ item.home_art }}_{{ item.art_img_count }}.{{ item.extension }}" alt='foto' />
+			</a>
+		</div>
+	{% endfor %}
+
+{% endblock %}

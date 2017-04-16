@@ -1,0 +1,40 @@
+{% macro priceTable(items, freeThreshold) %}
+	<table class="table">
+		<tr>
+			<th></th>
+			<th>Cena při objednávce do {{freeThreshold}}&nbsp;Kč</th>
+			<th>Cena při objednávce nad {{freeThreshold}}&nbsp;Kč</th>
+		</tr>
+		{% for item in items %}
+			<tr>
+				<td>{{item.name}}</td>
+				<td>
+					{% if item.price == 0 %}
+						zdarma
+					{% else %}
+						{{item.price}}&nbsp;Kč
+					{% endif %}
+				</td>
+				<td>zdarma</td>
+			</tr>
+		{% endfor %}
+	</table>
+{% endmacro %}
+
+{% extends "base/layout.twig" %}
+
+{% block content %}
+
+	{% import _self as macros %}
+
+	<h1>Ceny dopravy a platby</h1>
+
+	<h2>Doprava</h2>
+
+	{{ macros.priceTable(deliveries, freeThreshold)}}
+
+	<h2>Platební metody</h2>
+
+	{{ macros.priceTable(payments, freeThreshold)}}
+
+{% endblock %}

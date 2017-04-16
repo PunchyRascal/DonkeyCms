@@ -1,0 +1,188 @@
+<!doctpye html>
+<html>
+<head>
+	<title>Účtenka č. {{ receipt.id }}</title>
+	<link rel="stylesheet" href="/css/bootstrap.css" />
+	<style>
+		html {
+			background: #eee;
+		}
+		body {
+			margin: 0;
+			padding: 0;
+			width: 210mm;
+			height: 297mm;
+			padding: 10px;
+			box-sizing: border-box;
+		}
+		.receipt {
+			/*width: calc(50% - 2px);*/
+			border: 1px solid #666;
+			padding: 10px;
+			box-sizing: border-box;
+			display: inline-block;
+		}
+		.total {
+			font-size: 120%;
+			font-weight: bold;
+		}
+		table.table-borderless th {
+			border: none !important;
+		}
+		#panel {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			background: #feffef;
+			padding: 15px;
+		}
+		.wrap {
+			word-break: break-all;
+		}
+		.nowrap {
+			white-space: nowrap;
+		}
+	</style>
+	<style media="print">
+		.noprint {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+
+	{% if receipt.verification_only %}
+		<div class="alert alert-danger">POZOR: Toto je testovací účtenka!</div>
+	{% endif %}
+
+	{% if receipt.amount != receipt.itemsSum %}
+		<div class="alert alert-danger">Součet položek na účtence neodpovídá celkové sumě.</div>
+	{% endif %}
+
+	{% if not receipt.fik and not receipt.pkp %}
+		<div class="alert alert-danger">Nebyl vygenerován FIK ani PKP, účtenka je neplatná!</div>
+	{% endif %}
+
+	<div class="receipt">
+		<h1>Účtenka EET č. {{ receipt.id }}</h1>
+
+		<table class="table">
+			<tr>
+				<th>Provozovatel</th>
+				<td>{{ common.appName }}</td>
+			</tr>
+			<tr>
+				<th>IČ</th>
+				<td>xxx</td>
+			</tr>
+			<tr>
+				<th>DIČ</th>
+				<td>xxx</td>
+			</tr>
+			<tr>
+				<th>Provozovna</th>
+				<td>xxxx ID: XX (TODO), pokladna ID XX (TODO)</td>
+			</tr>
+			<tr>
+				<th class="nowrap">Datum vystavení</th>
+				<td>{{ receipt.created_at|datetime }}</td>
+			</tr>
+			<tr>
+				<th>FIK</th>
+				<td>
+					{{ receipt.fik }}
+					{{ not receipt.fik ? '*nebyl vystaven*'|markdown|raw }}
+				</td>
+			</tr>
+			<tr>
+				<th>BKP</th>
+				<td>{{ receipt.bkp }}</td>
+			</tr>
+			{% if not receipt.fik %}
+				<tr>
+					<th>PKP</th>
+					<td class="wrap">{{ receipt.pkp }}</td>
+				</tr>
+			{% endif %}
+			<tr>
+				<th colspan="2">Zakoupené zboží</th>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<table class='table table-borderless'>
+						<tr>
+							<th>počet</th>
+							<th>název</th>
+							<th>cena/ks</th>
+						</tr>
+
+						{% for item in items %}
+							<tr>
+								<td>{{ item.amount }}×</td>
+								<td>{{ item.description }}</td>
+								<td>{{ item.price|number_format }}&nbsp;Kč</td>
+								<td class="noprint">
+									<form method="post">
+										<input type="submit" name="removeItem" value="×">
+										<input type="hidden" name="id" value="{{item.id}}">
+										<input type="hidden" name="p" value="admin">
+										<input type="hidden" name="action" value="eetReceiptPrint">
+										<input type="hidden" name="receiptId" value="{{receipt.id}}">
+									</form>
+								</td>
+							</tr>
+						{% endfor %}
+
+					</table>
+
+					<form class="noprint" method="post">
+						<input style="width:50px" required value="1" type="number" name="amount" placeholder="množství">×
+						<input style="width:350px" required type="text" name="description" placeholder="název zboží">
+						<input style="width:100px" required type="number" name="price" placeholder="cena">&nbsp;Kč
+						<input type="submit" name="addRow" value="Přidat">
+						<input type="hidden" name="p" value="admin">
+						<input type="hidden" name="action" value="eetReceiptPrint">
+						<input type="hidden" name="receiptId" value="{{receipt.id}}">
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<th>Základ DPH</th>
+				<td>{{ (receipt.amount / (100 + common.vatRate) * 100)|number_format }}&nbsp;Kč</td>
+			</tr>
+			<tr>
+				<th>DPH {{common.vatRate}}&nbsp;%</th>
+				<td>{{ (receipt.amount / (100 + common.vatRate) * common.vatRate)|number_format }}&nbsp;Kč</td>
+			</tr>
+			<tr class="total">
+				<th>Celkem</th>
+				<td>{{ receipt.amount|number_format }}&nbsp;Kč</td>
+			</tr>
+		</table>
+
+		<div id="panel" class="noprint">
+			<h2>
+				Celkem za položky:
+				{{ receipt.itemsSum|number_format }}&nbsp;Kč
+			</h2>
+
+			{% if receipt.itemsSum > receipt.amount %}
+				<p class="alert alert-danger">v položkách přebývá {{ (receipt.itemsSum - receipt.amount)|number_format }}&nbsp;Kč ✖</p>
+				Nelze tisknout, ceny nesedí.
+			{% endif %}
+			{% if receipt.itemsSum < receipt.amount %}
+				<p class="alert alert-danger">v položkách chybí {{ (receipt.amount - receipt.itemsSum)|number_format }}&nbsp;Kč ✖</p>
+				Nelze tisknout, ceny nesedí.
+			{% endif %}
+			{% if receipt.itemsSum == receipt.amount %}
+				<p class="alert alert-success">položky odpovídají sumě ✔</p>
+				<button onclick="window.print()">Tisk</button>
+			{% endif %}
+
+		</div>
+
+		<p>Evidováno v běžném režimu.</p>
+	</div>
+
+</body>
+</html>

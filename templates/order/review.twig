@@ -1,0 +1,121 @@
+{% extends "base/layout.twig" %}
+
+{% block content %}
+
+	<h1>Rekapitulace objednávky</h1>
+
+	<p class="alert alert-info">Zkontrolujte prosím níže uvedené údaje a poté objednávku potvrďte.</p>
+
+	<table summary='Kontaktní a fakturační údaje' class='table table-striped'>
+		<tr>
+			<th>jméno:</th>
+			<td>{{ model.name }}</td>
+		</tr>
+		<tr>
+			<th>ulice:</th>
+			<td>{{ model.street }}</td>
+		</tr>
+		<tr>
+			<th>město:</th>
+			<td>{{ model.town }}</td>
+		</tr>
+		<tr>
+			<th>PSČ:</th>
+			<td>{{ model.zip }}</td>
+		</tr>
+		<tr>
+			<th>e-mail:</th>
+			<td>{{ model.email }}</td>
+		</tr>
+		<tr>
+			<th>telefon:</th>
+			<td>{{ model.phone }}</td>
+		</tr>
+		<tr>
+			<th>poznámka:</th>
+			<td>{{ model.note }}</td>
+		</tr>
+
+	</table>
+
+	<p><a class='btn btn-info btn-xs' title="Upravit adresu nebo poznámku" href='/?p=objednavka'>Upravit adresu</a></p>
+
+	<table id="Cart" class='table table-striped'>
+		<tr>
+			<th colspan="2">produkt</th>
+			<th><span title='Cena po slevě'><strong>cena</strong></span></th>
+			<th>množství</th>
+		</tr>
+
+		{% for item in model.getItems() %}
+			<tr>
+				<td>
+					<a href="?p=e-shop&amp;id={{ item.product_id }}">
+						<img width="64" src="/?p=resizeProductImage&amp;id={{ item.product_id }}&amp;maxWidth=64"></a>
+				</td>
+				<td class="middle">
+					<a href="?p=e-shop&amp;id={{ item.product_id }}">{{ item.product_name }}</a>
+					{% if item.variant %}
+						<br>varianta: {{ item.variant }}
+					{% endif %}
+				</td>
+				<td class='nowrap middle price'>
+					<strong>{{ (item.price * item.amount)|number_format }} Kč</strong>
+					{% if item.amount > 1 %}
+						<div class="text-muted">
+							{{ (item.price)|number_format }} Kč / ks
+						</div>
+					{% endif %}
+				</td>
+				<td class='text-right middle'>{{ item.amount }}</td>
+			</tr>
+		{% endfor %}
+
+		<tr>
+			<td>doprava: {{ model.getPostageLabel() }}</td>
+			<td colspan="3" class="num">
+				{{ model.getPostagePrice()|number_format }}&nbsp;Kč
+			</td>
+		</tr>
+
+		<tr>
+			<td>platba: {{ model.getPaymentLabel() }}</td>
+			<td colspan="3" class="num">
+				{{ model.getPaymentPrice()|number_format }}&nbsp;Kč
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<strong>CELKEM<span class="text-muted"> vč. DPH:</span></strong>
+			</td>
+			<td colspan='3' class="num">
+				<big>
+					{{ model.getGrandTotal()|number_format }}&nbsp;Kč
+				</big>
+			</td>
+		</tr>
+	</table>
+
+	<a class='btn btn-info btn-xs' href='/?p=kosik' title="Upravit položky v košíku, dopravu, platbu">Upravit košík</a>
+
+	<br>
+
+	<form id="finalOrder" method="post">
+		<input type=hidden value=objednavka-rekapitulace name=p>
+		<div class="center">
+			<br>
+			<input type="hidden" name="orderFinal" value="1" />
+			<button class="btn btn-lg btn-success" type="submit">
+				<span class="glyphicon glyphicon-hand-right"></span>
+				&nbsp;
+				Závazně objednat
+				&nbsp;
+				<span class="glyphicon glyphicon-hand-left"></span>
+			</button>
+			<br>
+			<br>
+		</div>
+	</form>
+
+{% endblock %}

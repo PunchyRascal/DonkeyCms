@@ -1,0 +1,191 @@
+{% extends "base/layout.twig" %}
+
+{% block content %}
+	<script src="/js/tinymce/tinymce.min.js"></script>
+	<script>
+		tinymce.init({
+			selector:'textarea.wysiwyg',
+			plugins: "link,image,code,table,visualblocks,preview,media,contextmenu,paste",
+			language: "cs",
+			language_url: "/js/tinymce/tinymce_lang_cs.js",
+			content_css : "/css/wysiwyg.css",
+			entity_encoding : "raw",
+			toolbar: "undo redo | styleselect alignleft aligncenter alignright | bold italic | link image insertImage | fileLink | bullist numlist | code",
+			convert_urls: false,
+			setup: function(editor) {
+				editor.addButton('insertImage', {
+					text: 'Obrázek',
+					icon: false,
+					onclick: function() {
+						window.open('/?p=admin&action=uploader#images', '_blank', 'height=600,width=1080,location=0,top=100,left=100');
+						$(window).on('message.insertImage', function (e) {
+							if (!RegExp("^{{common.appUrl|escape('js')}}$").test(e.originalEvent.origin)) {
+								return;
+							}
+							var imageSrc = e.originalEvent.data.src;
+							editor.insertContent('<img src="'+ imageSrc +'">');
+							$(this).off('message.insertImage');
+						});
+					}
+				});
+
+				editor.addButton('fileLink', {
+					text: 'Odkaz na soubor',
+					icon: false,
+					onclick: function() {
+						window.open('/?p=admin&action=uploader#images', '_blank', 'height=600,width=1080,location=0,top=100,left=100');
+						$(window).on('message.fileLink', function (e) {
+							if (!RegExp("^{{common.appUrl|escape('js')}}$").test(e.originalEvent.origin)) {
+								return;
+							}
+							var url = e.originalEvent.data.src,
+								linkText = editor.selection.getContent();
+
+							if (!linkText) {
+								linkText = url;
+							}
+							editor.insertContent('<a href="'+ url +'">'+ linkText +'</a>');
+							$(this).off('message.fileLink');
+						});
+					}
+				});
+			}
+		});
+
+		function CheckDelete(req_handle) {
+			if (confirm('Opravdu to mám smazat?')) {
+				location.href='/?p=admin&'+req_handle;
+			}
+		}
+	</script>
+	<div id="Admin">
+
+		{% if isAdminLogged == false %}
+
+			<h3>Přihlášení</h3>
+
+			<form action="/?p=admin" method="post" class="form-horizontal">
+
+				<div class="form-group">
+					<label for="fieldUser" class="col-sm-3 control-label">Jméno</label>
+					<div class="col-sm-6">
+						<input class="form-control" type="text" name="user" id="fieldUser" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="fieldPassword" class="col-sm-3 control-label">Heslo</label>
+					<div class="col-sm-6">
+						<input class="form-control" type="password" name="passw" id="fieldPassword" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-6 col-sm-push-3">
+						<input type="submit" class="btn btn-primary" name="loginSubmit" value="Přihlásit" />
+					</div>
+				</div>
+
+			</form>
+
+		{% else %}
+
+			<div id="adminUserPanel">
+				<a href="/?p=admin&amp;logout=logout">Odhlásit se</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-default btn-sm" id="adminCrossroadsToggle">≡ Menu</button>
+			</div>
+
+			<div id="adminCrossroads" class="{{ showMenu ? 'showMe' }}">
+				<div class="inner">
+					<table class='table table-striped'>
+
+						<tr class="{{ 'art' in currentAction ? 'active' }}">
+							<th>Články</th>
+							<td>
+								<a class="btn btn-default btn-sm" href="/?p=admin&amp;action=arts">Projít </a>
+								<a class="btn btn-info btn-sm" href="/?p=admin&amp;action=art_stat">Statistiky</a>
+							</td>
+							<td><a class="btn btn-success btn-sm" href="/?p=admin&amp;action=artEdit">Vložit </a></td>
+						</tr>
+
+						<tr class="{{ 'pages' == currentAction ? 'active' }}">
+							<th>Stránky</th>
+							<td>
+								<a class="btn btn-default btn-sm" href="/?p=admin&amp;action=pages">Projít</a>
+							</td>
+							<td>
+								<a class="btn btn-success btn-sm" href='/?p=admin&amp;action=pageEdit'>Vložit </a>
+							</td>
+						</tr>
+
+						<tr class="{{ 'ank' in currentAction ? 'active' }}">
+							<th>Ankety</th>
+							<td><a class="btn btn-default btn-sm" href="/?p=admin&amp;action=polls">Projít </a></td>
+							<td><a class="btn btn-success btn-sm" href="/?p=admin&amp;action=pollEdit">Vložit </a></td>
+						</tr>
+
+						<tr class="{{ 'e_item' in currentAction ? 'active' }}">
+							<th>E-shop produkty</th>
+							<td>
+								<a class="btn btn-default btn-sm" href="/?p=admin&amp;action=e_items">Projít</a>
+								<a class="btn btn-info btn-sm" href="/?p=admin&amp;action=productIssues">Chybné produkty</a>
+							</td>
+							<td><a class="btn btn-success btn-sm" href='/?p=admin&amp;action=e_item_edit'>Vložit </a></td>
+						</tr>
+
+						<tr class="{{ 'cat' in currentAction ? 'active' }}">
+							<th>E-shop kategorie</th>
+							<td><a class="btn btn-default btn-sm" href="/?p=admin&amp;action=e_cat">Projít </a></td>
+							<td><a class="btn btn-success btn-sm" href='/?p=admin&amp;action=cat_edit'>Vložit </a></td>
+						</tr>
+
+						<tr class="{{ 'order' in currentAction ? 'active' }}">
+							<th>E-shop Objednávky</th>
+							<td>
+								<a class="btn btn-default btn-sm" href="/?p=admin&amp;action=e_orders">Projít </a>
+								<a class="btn btn-info btn-sm" href="/?p=admin&amp;action=order_resume">Statistiky</a>
+								<a class="btn btn-primary btn-sm" href="/?p=admin&action=e_orders&status=-1">Hledat
+									&nbsp;<span class="glyphicon glyphicon-search"></span></a>
+							</td>
+							<td>&#160;</td>
+						</tr>
+
+						<tr class="{{ 'paymentDelivery' in currentAction ? 'active' }}">
+							<th>E-shop Doprava, platba</th>
+							<td>
+								<a class="btn btn-default btn-sm" href="/?p=admin&amp;action=paymentDelivery">Projít </a>
+							</td>
+							<td></td>
+						</tr>
+
+						<tr class="{{ 'banner' == currentAction ? 'active' }}">
+							<th>Banner webu</th>
+							<td>&#160;</td>
+							<td><a class="btn btn-success btn-sm" href="/?p=admin&amp;action=banner">Vložit </a></td>
+						</tr>
+
+						<tr class="{{ 'eetList' == currentAction ? 'active' }}">
+							<th>EET</th>
+							<td>
+								<a class="btn btn-default btn-sm" href="/?p=admin&amp;action=eetList">Projít</a>
+							</td>
+							<td>
+								<a class="btn btn-success btn-sm" href='/?p=admin&amp;action=eetSend'>Vložit </a>
+							</td>
+						</tr>
+
+						<tr class="{{ 'adminUser' in currentAction ? 'active' }}">
+							<th>Uživatelé admina</th>
+							<td><a class="btn btn-default btn-sm" href="/?p=admin&amp;action=adminUsers">Projít </a></td>
+							<td><a class="btn btn-success btn-sm" href="/?p=admin&amp;action=adminUserEdit">Vložit </a></td>
+						</tr>
+
+					</table>
+				</div>
+			</div>
+
+			{% block contentAdmin %}{% endblock %}
+
+		{% endif %}
+	</div>
+{% endblock %}

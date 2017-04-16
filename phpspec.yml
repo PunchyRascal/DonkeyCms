@@ -1,0 +1,6 @@
+formatter.name: pretty
+suites:
+    punchyrascal_donkeycms_suite:
+        namespace: PunchyRascal\DonkeyCms
+        psr4_prefix: PunchyRascal\DonkeyCms
+        src_path: %paths.config%/vendor/punchyrascal/donkeycms/lib

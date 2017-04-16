@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SHOP xmlns="http://www.zbozi.cz/ns/offer/1.0">
+	{% for item in items %}
+		{% set availability = '' %}
+		{% if item.stock > 0 and item.availability == '' %}
+			{% set availability = '0' %}
+		{% elseif item.availability_days >= 0 %}
+			{% set availability = item.availability_days %}
+		{% endif %}
+
+		{% set image = item.image_url ?: {{ common.appUrl }} ."/upload/product/"~ item.id ~"_1.jpg" %}
+		{% set price = item.price - item.discount %}
+
+		<SHOPITEM>
+			<PRODUCT>{{ item.name|striptags }}</PRODUCT>
+			<PRODUCTNAME>{{ item.name|striptags }}</PRODUCTNAME>
+			<DESCRIPTION>{{ item.desc|br2nl|striptags|entity_decode }}></DESCRIPTION>
+			<URL>{{ common.appUrl }}/?p=e-shop&amp;id={{ item.id }}</URL>
+			<ITEM_TYPE>new</ITEM_TYPE>
+			<DELIVERY_DATE>{{ availability }}</DELIVERY_DATE>
+			<IMGURL>{{ image }}</IMGURL>
+			<PRICE_VAT>{{ price }}</PRICE_VAT>
+			<MANUFACTURER>{{ item.make }}</MANUFACTURER>
+			<CATEGORYTEXT>{{ item.parent2Name ? item.parent2Name~" | " }}{{ item.parentName ? item.parentName~" | " }}{{ item.catName }}</CATEGORYTEXT>
+			<EAN>{{ item.ean }}</EAN>
+			<ITEM_ID>{{ item.id }}</ITEM_ID>
+			{% if showDelivery %}
+				<DELIVERY>
+					<DELIVERY_ID>CESKA_POSTA</DELIVERY_ID>
+					<DELIVERY_PRICE>{{ item.deliveryPriceCzPost }}</DELIVERY_PRICE>
+					<DELIVERY_PRICE_COD>{{ item.deliveryPriceCzPostCod }}</DELIVERY_PRICE_COD>
+				</DELIVERY>
+				<DELIVERY>
+					<DELIVERY_ID>PPL</DELIVERY_ID>
+					<DELIVERY_PRICE>{{ item.deliveryPrivePpl }}</DELIVERY_PRICE>
+					<DELIVERY_PRICE_COD>{{ item.deliveryPricePplCod }}</DELIVERY_PRICE_COD>
+				</DELIVERY>
+			{% endif %}
+		</SHOPITEM>
+	{% endfor %}
+</SHOP>
+

@@ -1,0 +1,65 @@
+<h1>Provedená objednávka na {{ appName }} č. {{ model.public_id }}</h1>
+
+{% if model.payment == 'transfer' %}
+	<p>Vaše objednávka na e-shopu {{ appName }} byla úspěšně přijata a předána k potvrzení.</p>
+	<p>
+		Platbu převodem, prosím, proveďte až po potvrzení objednávky, které Vám přijde jako samostatný e-mail
+		se stavem objednávky, kde naleznete i potřebné platební údaje.
+		<br />
+		Děkujeme.
+	</p>
+{% else %}
+	<p>Potvrzujeme, že jste si u nás objednal/a toto zboží:</p>
+{% endif %}
+
+<h3>Objednané položky</h3>
+<table border='1' style='border-collapse: collapse' width='70%'>
+	<tr>
+		<th>položka</th>
+		<th><span title='Cena po slevě'><strong>cena/ks</strong></span></th>
+		<th>množství</th>
+		<th>(varinata)</th>
+	</tr>
+	{% for item in model.getItems() %}
+		<tr>
+			<td><a href="{{ appUrl }}/?p=e-shop&id={{ item.product_id }}">{{ item.product_name }}</a></td>
+			<td style="text-align:right;">{{ item.price|number_format }} Kč</td>
+			<td style="text-align:right;">{{ item.amount }}</td>
+			<td>{{ item.variant }}</td>
+		</tr>
+	{% endfor %}
+
+	<tr>
+		<td>doprava: {{ model.getPostageLabel()|raw }}</td>
+		<td style="text-align:right;" colspan='3'>{{ model.getPostagePrice()|number_format }} Kč</td>
+	</tr>
+
+	<tr>
+		<td>platba: {{ model.getPaymentLabel() }}</td>
+		<td style="text-align:right;" colspan='3'>{{ model.getPaymentPrice()|number_format }} Kč</td>
+	</tr>
+
+	<tr>
+		<td>CELKEM</td>
+		<td style="text-align:right;" colspan='3'>{{ model.getGrandTotal()|number_format }} Kč</td>
+	</tr>
+
+</table>
+
+<p>Uvedli jste přitom tyto údaje:</p>
+
+<ul>
+	<li><strong>jméno:</strong> {{ model.name }}</li>
+	<li><strong>ulice:</strong> {{ model.street }}</li>
+	<li><strong>město:</strong> {{ model.town }}</li>
+	<li><strong>PSČ:</strong> {{ model.zip }}</li>
+	<li><strong>e-mail:</strong> {{ model.email }}</li>
+	<li><strong>telefon:</strong> {{ model.phone }}</li>
+	<li><strong>poznámka:</strong> {{ model.note }}</li>
+</ul>
+
+<p><br />Vaši objednávku telefonicky nebo e-mailem potvrdíme.<br /><a href="{{ appUrl }}">{{ appName }}</a></p>
+
+<br />
+
+<small>{{ model.date|datetime }} ID Objednávky: {{ model.public_id }}</small>

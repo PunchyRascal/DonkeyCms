@@ -1,0 +1,41 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>Přihlášení účastníci</h1>
+
+	<table class='table table-striped'>
+		<tr>
+			<th>datum</th>
+			<th>
+				jméno<br />
+				nick
+			</th>
+			<th>narozen</th>
+			<th>
+				email<br />
+				telefon
+			</th>
+			<th>místo</th>
+			<th>sponzoři</th>
+			<th>poznámka</th>
+		</tr>
+
+		{% for item in items %}
+			<tr>
+				<td class="nobr">{{ item.date|date }}</td>
+				<td>{{ item.name }} {{ item.surname }}<br />
+				<em>{{ item.nick }}</em></td>
+				<td>{{ item.born }}</td>
+				<td>
+					<a href='mailto:{{ item.email }}'>{{ item.email }}</a><br />
+					{{ item.phone }}
+				</td>
+				<td><a href="http://mapy.cz/?query={{ item.place }}">{{ item.place }}</a></td>
+				<td>{{ item.sponsors }}</td>
+				<td>{{ item.note }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+{% endblock %}

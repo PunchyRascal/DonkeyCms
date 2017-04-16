@@ -1,0 +1,163 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>
+		Upravit/vložit produkt
+		<a href='/?p=admin&amp;action=images&amp;id={{ item.id }}&amp;type=product' class='btn btn-info'>fotky</a>
+	</h1>
+
+	{% if item.id %}
+		<p class="text-center">
+			<img src='/pimage/{{ item.id }}?maxWidth=100' alt='' />
+		</p>
+	{% endif %}
+
+	<form action="/?p=admin&amp;action=e_item_edit" method='post' class="form-horizontal">
+
+		<div class="form-group">
+			<label for="name" class="col-sm-3 control-label">Název</label>
+			<div class="col-sm-9">
+				<input class="form-control" type="text" name="name" value="{{ item.name }}" id="name" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="name" class="col-sm-3 control-label">Původ</label>
+			<div class="col-sm-9">
+				<p class="help-block">{{ item.origin ?: 'vlastní' }}, ID: {{ item.external_id ?: item.id }} </p>
+			</div>
+		</div>
+
+		<div class="panel panel-info col-sm-offset-3">
+			<div class="panel-heading">
+				<h3 class="panel-title">Nastavení</h3>
+			</div>
+			<div class="panel-body">
+
+				{% if item.origin and not item.import_resolved %}
+					<div class="form-group">
+						<div class="col-sm-offset-1 col-sm-9">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" name="import_resolved" value="1">
+									označit tento importovaný produkt jako zařazený
+								</label>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+
+				{% if item.origin %}
+					<div class="form-group">
+						<div class="col-sm-offset-1 col-sm-9">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" name="auto_update" value="1" {{ item.auto_update ? 'checked' }}>
+									aktualizovat automaticky
+								</label>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+
+				<div class="form-group">
+					<div class="col-sm-offset-1 col-sm-9">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="active" value="1" id="active" {{ item.active ? 'checked' }} />
+								aktivní
+							</label>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="make" class="col-sm-3 control-label">Výrobce</label>
+			<div class="col-sm-9">
+				<input class="form-control" type="text" name="make" value="{{ item.make }}" id="make" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="variant" class="col-sm-3 control-label">Varianty</label>
+			<div class="col-sm-9">
+				<input class="form-control" type="text" name="variant" value="{{ item.variant }}" id="variant" />
+				<span class="help-block">jednotlivé varianty oddělovat čárkou</span>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="fieldPrice" class="col-sm-3 control-label">Cena</label>
+			<div class="col-sm-9">
+				<input class="form-control" type="number" name="price" value="{{ item.price }}" id="fieldPrice" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="fieldStock" class="col-sm-3 control-label">Sklad</label>
+			<div class="col-sm-9">
+				<input class="form-control" type="number" name="stock" value="{{ item.stock }}" id="fieldStock" />
+			</div>
+		</div>
+
+		<div class="form-group form">
+			<label for="availability" class="col-sm-3 control-label">Dostupnost</label>
+			<div class="col-sm-9">
+				<input class="form-control availabilityInput" type="text" name="availability" value="{{ item.availability }}" id="availability" />
+				<span class="help-block">
+					<a data-value="Skladem na prodejně" class="btn btn-xs btn-default btn-faded setPredefinedAvailability">↑ na prodejně</a>
+					textový popis dostupnosti
+				</span>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="availability_days" class="col-sm-3 control-label">Dostupnost - dny</label>
+			<div class="col-sm-9">
+				<input class="form-control" type="number" name="availability_days" value="{{ item.availability_days }}" id="availability_days" />
+				<span class="help-block">
+					počet dní, za jaký může být zboží u zákazníka (skladem = 0)
+				</span>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="discount" class="col-sm-3 control-label">Sleva v Kč</label>
+			<div class="col-sm-9">
+				<input class="form-control" type="text" name="discount" value="{{ item.discount }}" id="discount" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="discount" class="col-sm-3 control-label">Kategorie</label>
+			<div class="col-sm-9">
+				<div class=referenceContainer>
+					<div class=referenceSelected>
+						<span class=name>{{ item.catParentName }} &gt; {{ item.catName }}</span>
+						<input type="hidden" name="home" value="{{ item.home }}" />
+					</div>
+					<div class="referenceSelector">
+						<div class=catMenu data-line-content="{{ lineContent|escape('html_attr') }}">{{ catSelector|raw }}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<textarea cols="70" name="desc" id="desc" rows="16" class="wysiwyg">{{ item.desc }}</textarea>
+
+		<div class="clear"><br></div>
+
+		<div class="center">
+			<input type="submit" class="btn btn-primary btn-lg" name="e_item_edit_submit" value="Uložit" id="cat_edit_submit" />
+		</div>
+
+		<input type="hidden" name="id" value="{{ item.id }}" />
+
+		</fieldset>
+	</form>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{
+	"db": {
+		"server": "localhost",
+		"user": "username",
+		"password": "password",
+		"name": "db-name"
+	},
+	"appName": "Donkeys are awesome!",
+	"appDescription": "Love Donkeys, go Vegan!",
+	"emailFrom": "Donkey <info@example.com>",
+	"emailTo": "info@example.com",
+	"appUrl": "https://example.com",
+	"recaptcha": {
+		"secret": null,
+		"siteKey": null
+	},
+	"zasilkovna": {
+		"key": null,
+		"eshop": null
+	},
+	"heurekaKey": null,
+	"facebook": {
+		"appSecret": null,
+		"appId": null,
+		"pageId": null,
+		"token": null
+	},
+	"zboziChecksum": null,
+	"googleAnalyticsId": null,
+	"facebookPageUrl": null,
+	"googleMapsKey": null,
+	"useCaptcha": false,
+	"useCache": false,
+	"isProductionMode": false
+}

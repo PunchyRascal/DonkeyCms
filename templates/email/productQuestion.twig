@@ -1,0 +1,18 @@
+<h1>Dotaz na produkt z webu</h1>
+
+<h3>Výrobek</h3>
+{{ product }}
+
+<h3>Odkaz</h3>
+<a href="{{ link }}">{{ link }}</a>
+
+<h3>Kontakt</h3>
+{{ contact }}
+
+<h3>Dotaz</h3>
+
+{{ text|nl2br }}
+
+<hr>
+
+<p><small>Datum:{{ model.date|datetime }}</small></p>

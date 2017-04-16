@@ -1,0 +1,74 @@
+{% extends "base/layout.twig" %}
+
+{% block content %}
+
+	<ol class="breadcrumb">
+		<li><a href="/?p=e-shop">E-shop</a></li>
+		{% if product.parentName %}
+			<li><a href='/?p=e-shop&amp;cat={{ product.parentId }}' >{{ product.parentName }}</a></li>
+		{% endif %}
+		<li><a href='/?p=e-shop&amp;cat={{ product.cat_id }}'>{{ product.cat_name}}</a></li>
+		<li class="active">{{ product.name}}</li>
+	</ol>
+
+	<div id='productDetail'>
+
+		<a data-product-name="{{ product.name }}" data-product-id="{{ product.id }}" class="addToFavorites">
+			<span class="glyphicon glyphicon-star"></span>
+			<span class="text"></span>
+		</a>
+
+		<div class="alert alert-danger">
+			Tento produkt již není v nabídce a nelze jej zakoupit.
+		</div>
+
+		<h1>
+			{{ product.name }}
+		</h1>
+
+		<div class="image">
+
+			{% if product.image_url %}
+				<a class=viewPhoto href='/pimage/{{ product.id }}'>
+				<img src="/pimage/{{ product.id }}" alt='{{ product.name }}' /></a>
+			{% endif %}
+
+			{% for row in productImages %}
+				<a class=viewPhoto href='/upload/product/{{row.home_art}}_{{row.art_img_count}}.{{row.extension}}'>
+				<img src='/upload/product/{{row.home_art}}_{{row.art_img_count}}.{{row.extension}}' alt='' /></a>
+			{% endfor %}
+
+		</div>
+
+		<br>
+
+		{% if showEditLink %}
+			<a class="editLink btn btn-primary noPrint" href="/?p=admin&action=e_item_edit&id={{ product.id }}&amp;from=0&cat=61">Editovat</a>
+		{% endif %}
+
+		<table class='table table-striped'>
+			<tr>
+				<td>Výrobce</td>
+				<td>{{ product.make }}</td>
+			</tr>
+
+			<tr class="small text-muted">
+				<td>Číslo produktu</td>
+				<td>
+					{{ product.id }}
+				</td>
+			</tr>
+
+		</table>
+
+		<div class='description'>
+			{{ product.desc|raw|nl2br|raw }}
+		</div>
+
+		{% include 'product/queryForm.twig' %}
+
+	</div>
+
+	{% include 'product/richtextData.twig' %}
+
+{% endblock %}

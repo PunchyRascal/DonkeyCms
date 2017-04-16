@@ -1,0 +1,62 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>
+		Vložit / upravit článek
+		<a href='/?p=admin&amp;action=images&amp;id={{ item.id }}&amp;type=art' class='btn btn-info'>fotky</a>
+	</h1>
+
+	<form action="/" method="post" class="form-horizontal">
+
+		<div class="form-group">
+			<label for="heading" class="col-sm-2 control-label">Nadpis</label>
+			<div class="col-sm-10">
+				<input class="form-control" type="text" name="heading" id="heading" value="{{ item.heading }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="author" class="col-sm-2 control-label">Autor</label>
+			<div class="col-sm-10">
+				<input class="form-control" type="text" name="author" id="author" value="{{ item.author }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="artCategory" class="col-sm-2 control-label">Sekce</label>
+			<div class="col-sm-10">
+				<select class="form-control" id="artCategory" name="art_category">
+					<option value="novinky"		{{ item.category == 'novinky' ? "selected" }}>novinky</option>
+					<option value="obyvatele"	{{ item.category == 'obyvatele' ? "selected" }}>obyvatelé</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" value="1" name="enable_discussion" id="discussion" {{ item.enable_discussion ? 'checked' }}>
+						Aktivovat diskuzi
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<textarea class="wysiwyg" name="teaser" id="article_teaser" cols="92" rows="4" class="wysiwyg">{{ item.teaser }}</textarea>
+
+		<div class="clear"></div>
+
+		<textarea name="article" id="article_text" cols="92" rows="15" class="wysiwyg">{{ item.art }}</textarea>
+
+		<br>
+
+		<input class="btn btn-primary btn-lg btn-block" type="submit" name="articleEditSubmit" value="Uložit" />
+
+		<input type="hidden" name="id" value="{{ item.id }}" />
+		<input type="hidden" name="p" value="admin" />
+		<input type="hidden" name="action" value="artEdit" />
+	</form>
+
+{% endblock %}

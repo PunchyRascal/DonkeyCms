@@ -1,0 +1,144 @@
+{% extends "admin/basev2.twig" %}
+
+{% block content %}
+
+	<script src="/js/Chart.js"></script>
+	<script type="text/javascript">
+		// x-axes label callback
+		//Chart.defaults.scale.ticks.callback = function (tickValue, index, ticks) {
+		//	return tickValue + 'foo';//'foo boo';
+		//};
+		function makePrevPeriodLabel(tooltipItems, data) {
+			return data.datasets[0].labels[tooltipItems[0].index];
+		}
+
+		Chart.defaults.global.tooltips.callbacks.label = function (tooltipItem, data) {
+			return [
+				tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + ' Kč'
+			];
+		};
+		var tooltipTitleCallback = function (tooltipItems, data) {
+			console.log(tooltipItems);
+			console.log(data);
+			var tooltip = tooltipItems[0];
+			var titleDate = tooltip.datasetIndex === 0 ?
+				makePrevPeriodLabel(tooltipItems, data) : tooltip.xLabel;
+			return data.datasets[tooltip.datasetIndex].label + ' '+ titleDate;
+		};
+		var yAxesLabelCallback = function (a, b, c) {
+			return a.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + ' Kč';
+		};
+		var defaultOptions = {
+			scales: {
+				yAxes: [{
+					type: "linear",
+					ticks: {
+						callback: yAxesLabelCallback
+					}
+				}]
+			}
+		};
+	</script>
+
+	<div class="col-lg-8 col-md-12">
+
+		<h3>Odeslané objednávky po letech</h3>
+
+		<canvas id="sentPerYearChart"></canvas>
+
+		<script>
+			new Chart(document.getElementById("sentPerYearChart").getContext('2d'), {
+				type: 'bar',
+				data: {
+					labels: {{ ordersSentYearsLabels|json_encode()|raw }},
+					datasets: [{
+						label: '',
+						backgroundColor: "rgba(150,100,222,1)",
+						borderWidth: 0,
+						data: {{ ordersSentYearsData|json_encode()|raw }},
+					}, {
+						label: 'projekce/odhad',
+						backgroundColor: "rgba(250,200,222,1)",
+						borderWidth: 0,
+						data: {{ ordersSentYearsProjectionData|json_encode()|raw }},
+					}],
+				},
+				options: $.extend({}, defaultOptions, {
+					legend: {display: false},
+					scales: {
+						xAxes: [{
+							stacked: true
+						}],
+						yAxes: [{
+							stacked: true,
+							ticks: {callback: yAxesLabelCallback}
+						}]
+					},
+					tooltips: {
+						callbacks: {
+							title: function (tooltips, data) {
+								var tooltip = tooltips[0];
+								var dataSetLabel = data.datasets[tooltip.datasetIndex].label;
+								return tooltip.xLabel + (dataSetLabel ? ' - ' + dataSetLabel : '');
+							}
+						}
+					}
+				})
+			});
+		</script>
+
+		<h3>Odeslané objednávky po měsících</h3>
+
+		<canvas id="sentPerMonthChart"></canvas>
+
+		<script>
+			new Chart(document.getElementById("sentPerMonthChart").getContext('2d'), {
+				type: 'bar',
+				data: {
+					labels: {{ ordersSentLabels|json_encode()|raw }},
+					datasets: [{
+						label: 'Minulý rok',
+						labels: {{ ordersSentPrevLabels|json_encode()|raw }},
+						borderWidth: 0,
+						backgroundColor: "rgba(105,240,132,0.25)",
+						data: {{ ordersSentPrevData|json_encode()|raw }},
+					}, {
+						label: 'Aktuální období',
+						backgroundColor: "rgba(105,240,132,1)",
+						borderWidth: 0,
+						data: {{ ordersSentData|json_encode()|raw }},
+					}],
+				},
+				options: $.extend({}, defaultOptions, {
+					tooltips: {callbacks: {title: tooltipTitleCallback}}
+				})
+			});
+		</script>
+
+		<h3>Zrušené a vrácené objednávky</h3>
+		<canvas id="cancelledPerMonthChart"></canvas>
+		<script type="text/javascript">
+			new Chart(document.getElementById("cancelledPerMonthChart"), {
+				type: 'bar',
+				data: {
+					labels: {{ ordersCancelledLabels|json_encode()|raw }},
+					datasets: [{
+						label: 'Minulý rok',
+						borderWidth: 0,
+						backgroundColor: "rgba(105,200,232,0.25)",
+						data: {{ ordersCancelledPrevData|json_encode()|raw }},
+					}, {
+						label: 'Aktuální období',
+						backgroundColor: "rgba(105,200,232,1)",
+						borderWidth: 0,
+						data: {{ ordersCancelledData|json_encode()|raw }},
+					}],
+				},
+				options: $.extend({}, defaultOptions, {
+					tooltips: {callbacks: {title: tooltipTitleCallback}}
+				})
+			});
+		</script>
+	</div>
+
+{% endblock %}

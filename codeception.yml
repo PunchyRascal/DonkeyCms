@@ -1,0 +1,22 @@
+actor: Tester
+url: http://zbk.localhost
+paths:
+    tests: codeceptionTests
+    log: codeceptionTests/_output
+    data: codeceptionTests/_data
+    support: codeceptionTests/_support
+    envs: codeceptionTests/_envs
+settings:
+    bootstrap: _bootstrap.php
+    colors: true
+    memory_limit: 1024M
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+modules:
+    config:
+        Db:
+            dsn: ''
+            user: ''
+            password: ''
+            dump: codeceptionTests/_data/dump.sql

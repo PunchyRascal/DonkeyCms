@@ -1,0 +1,76 @@
+{% extends "admin/base.twig" %}
+
+{% block contentAdmin %}
+
+	<h1>Nezařazené importované produkty</h1>
+
+	<div class=messageInfo>Uložením bude produkt zařazen do dané kategorie, začne se zobrazovat na webu a zmizí z této stránky.</div>
+
+	<form action='/'>
+		<input type=hidden name=p value=admin>
+		<input type=hidden name=action value=importResolve>
+		značka: <select name=make class=autosubmit>
+			<option value=""> - </option>
+			{% for item in makes %}
+				<option {{ currentMake == item.make ? 'selected' }} value="{{ item.make }}">{{ item.make }}</option>
+			{% endfor %}
+		</select>
+
+		VO: <select name=origin class=autosubmit>
+			<option value=""> - </option>
+			{% for item in origins %}
+				<option {{ currentOrigin == item.origin ? 'selected' }} value="{{ item.origin }}">{{ item.origin }}</option>
+			{% endfor %}
+		</select>
+		
+		({{ count }} položek)
+	</form>
+
+	<form method=post>
+
+		{% for item in data %}
+			<h3><a target=_blank href='/?p=admin&amp;action=e_item_edit&amp;id={{ item.id }}'>{{ item.name }}</a></h3>
+
+			<div class="col-md-6" class=resolveItem>
+				<dl>
+					<dt>zdroj</dt>
+					<dd>{{ item.origin }}</dd>
+
+					<dt>výrobce</dt>
+					<dd>{{ item.make }}</dd>
+
+					<dt>cena</dt>
+					<dd>{{ item.price|number_format }} Kč</dd>
+
+					<dt>popis</dt>
+					<dd>{{ cut(item.desc, 100)|raw }}</dd>
+				</dl>
+
+				<img src="/pimage/{{ item.id }}" style='max-width: 400px; width: auto !important;' alt='' />
+			</div>
+
+			<div class="col-md-6">
+				<div class='referenceContainer small'>
+					<div class=referenceSelected>
+						<span class=name></span>
+						<input type=hidden name='home[{{ item.id }}]' />
+					</div>
+					<div class='referenceSelector'>
+						<div class=catMenu data-line-content="{{ lineContent|escape('html_attr') }}">{{ cats|raw }}</div>
+					</div>
+				</div>
+			</div>
+
+			<hr class="clear">
+		{% endfor %}
+
+		<input class="btn btn-primary btn-lg btn-block" type=submit value=Uložit>
+		<input type=hidden name=action value=importResolve>
+		<input type=hidden name=importResolveSubmit value="1">
+		<input type=hidden name=make value="{{ currentMake }}">
+
+	</form>
+
+	{% include 'base/pager.twig' %}
+
+{% endblock %}

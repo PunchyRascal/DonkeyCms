@@ -1,0 +1,41 @@
+{% extends "base/layout.twig" %}
+
+{% block content %}
+
+	<h1>
+		Objednávka dokončena
+		<span class="glyphicon glyphicon-thumbs-up"></span>
+	</h1>
+
+	<div class="alert alert-success">
+		<p>
+			<span class="glyphicon glyphicon-ok"></span>
+			Děkujeme za vaši objednávku.
+		</p>
+		<p>
+			<span class="glyphicon glyphicon-send"></span>
+			Informace o této objednávce (č. <span id="tOrderId">{{ orderId }}</span>) jsme Vám poslali na e-mail.
+		</p>
+	</div>
+
+	{% if useProductionFeatures %}
+
+		{% if zboziChecksum %}
+			<iframe src="https://www.zbozi.cz/action/21822/conversion?chsum={{zboziChecksum}}&amp;price={{ orderPrice }}&amp;uniqueId={{ orderId }}" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="position:absolute; top:-3000px; left:-3000px; width:1px; height:1px; overflow:hidden;"></iframe>
+		{% endif %}
+
+		{% if common.googleAnalyticsId %}
+			<script>
+				ga('require', 'ecommerce');
+				ga('ecommerce:addTransaction', {
+					'id': '{{ orderId }}',
+					'revenue': '{{ orderPrice }}',
+					'currency': 'CZK'
+				});
+				ga('ecommerce:send');
+			</script>
+		{% endif %}
+
+	{% endif %}
+
+{% endblock %}

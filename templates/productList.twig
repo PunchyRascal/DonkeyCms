@@ -1,0 +1,150 @@
+{% extends "base/layout.twig" %}
+
+{% block content %}
+
+	{% if showDiscounted %}
+		<h1>Akční slevy</h1>
+	{% elseif showCategoryHeading %}
+		<h1 class="editObject" data-edit-action="cat_edit" data-edit-id="{{ category.id }}">{{ category.name|ucfirst }} {{ category.parentName ? '(' ~ category.parentName ~ ')' }}</h1>
+	{% endif %}
+
+	{% if message %}
+		<div class=messageKo>{{ message }}</div>
+	{% endif %}
+
+	<a class="button" id="mobileCategoryLink" href="#catMenu">Kategorie e-shopu</a>
+
+	{% include 'parts/subcategories.twig' %}
+
+	{% if showProducts %}
+
+		<div id="toolbar">
+
+			<form class="form-inline">
+				<div class="item aright t-ProductCount">{{ count }} položek</div>
+
+				<div class="item">
+					<label>řazení:</label>
+					<select class='autosubmit form-control' name="sortby">
+						<option value=''> - </option>
+						<option value="1"{{ sortbyId == 1 ? " selected" }}>podle názvu A - Z</option>
+						<option value="2"{{ sortbyId == 2 ? " selected" }}>podle názvu Z - A</option>
+						<option value="3"{{ sortbyId == 3 ? " selected" }}>od nejlevnějšího</option>
+						<option value="4"{{ sortbyId == 4 ? " selected" }}>od nejdražšího</option>
+						<option value="5"{{ sortbyId == 5 ? " selected" }}>podle výrobce A - Z</option>
+						<option value="6"{{ sortbyId == 6 ? " selected" }}>podle výrobce Z - A</option>
+						<option value="7"{{ sortbyId == 7 ? " selected" }}>od nejvyšší slevy</option>
+						<option value="8"{{ sortbyId == 8 ? " selected" }}>od nejnižší slevy</option>
+					</select>
+				</div>
+
+				<div class="item">
+					<label>značka:</label>
+					<select name=make class="autosubmit form-control">
+						<option value=''> - </option>
+						{% for make in makes %}
+							<option {{ currentMake == make.make ? 'selected' }} value='{{ make.make }}'>{{ make.make }}</option>
+						{%endfor%}
+					</select>
+				</div>
+
+				<input type="hidden" name="p" value="e-shop" />
+				<input type="hidden" name="sleva" value="{{showDiscounted}}" />
+				{% if category.id %}
+					<input type="hidden" name="cat" value="{{ category.id }}" />
+				{% endif %}
+				{% if common.eSearch %}
+					<input type="hidden" name="eSearch" value="{{ common.eSearch }}" />
+				{% endif %}
+
+				<div class="item">
+					<input type="checkbox" value="1" id="filter" name="filter" {{ filter ? " checked" }} class=autosubmit />
+					<label for="filter" class="label_normal">
+						pouze skladem
+						<img class='middle noborder' src='/images/yes.gif' alt='Zboží máme skladem, ihned k expedici' title='Zboží máme skladem, ihned k expedici' />
+					</label>
+				</div>
+			</form>
+
+		</div>
+
+		<div>
+
+			{% for item in list %}
+
+				<div class='e_item editObject' data-edit-action="e_item_edit" data-edit-id="{{ item.id }}">
+					<div class="inner">
+						<h4 title='{{ item.name }}'><a href='/?p=e-shop&amp;id={{ item.id }}'>{{ cut(item.name, 60)|raw }}</a></h4>
+
+						<div class=text>{{ cut(item.desc, 120)|raw }}</div>
+
+						<div class=image>
+							{% if item.image_url %}
+								<a href='/?p=e-shop&amp;id={{ item.id }}'><img src='/pimage/{{ item.id }}?maxWidth=240' alt='' /></a>
+							{% elseif item.imgExists %}
+								<a href='/?p=e-shop&amp;id={{ item.id }}'><img src='/upload/product/T/{{ item.id }}_1.jpg' alt='' /></a>
+							{% endif %}
+							{% if item.availability == 'Skladem na prodejně' and item.stock > 0 %}
+								<div class="tags">
+									<div class="tag stock">Skladem na prodejně</div>
+								</div>
+							{% endif %}
+						</div>
+
+						<div class=buyMe>
+							<div class='price'>
+								<span class=value title='cena vč. DPH'>{{ (item.price - item.discount)|number_format }} Kč</span>
+
+								{% if item.discount %}
+									<div class=discount>
+										<strong>sleva {{ item.discountPercent|number_format }} %</strong>
+										<span title='původní cena' class='strike'>{{ item.price|number_format }} Kč</span>
+									</div>
+								{% endif %}
+							</div>
+
+						{% if item.variant %}
+							<form method=get>
+								<input type=hidden name=id value="{{ item.id }}" />
+								<input type=hidden name=p value=e-shop />
+								<input class="btn btn-default" title='Je třeba zvolit variantu'
+									   type=submit name=buy_submit value="Vybrat variantu" />
+							</form>
+						{% else %}
+							<form action="/" method=post>
+								<input type=hidden name=id value="{{ item.id }}" />
+								<input type=hidden value=1 name=amount />
+								<input type=hidden name=p value=kosik />
+								<input class="btn btn-default" type=submit name=buy_submit value=Koupit />
+							</form>
+						{% endif %}
+
+						</div>
+
+						<div class=stock>
+							{% if item.stock %}
+								<img class='middle noborder' src='/images/yes.gif' alt='Skladem' />
+							{% else %}
+								<img class='middle noborder' src='/images/no.gif' alt='Není skladem' />
+							{% endif %}
+							skladem: {{ item.stock }} ks
+							{{ item.availability ? ('<span class=notice>('~item.availability|e~')</span>')|raw }}
+							{{ item.stock and not item.availability ? '<span class=notice>ihned</span>'|raw }}
+						</div>
+					</div>
+
+				</div>
+
+			{% else %}
+				<div class=messageInfo>Nebylo nalezeno žádné zboží</div>
+			{% endfor %}
+
+		</div>
+
+		<br class='clear' />
+
+		{% include 'base/pager.twig' %}
+
+	{% endif %}
+
+{% endblock %}
