@@ -23,16 +23,16 @@ class Runner {
 	private $log;
 
 	public function __construct(\PunchyRascal\DonkeyCms\Application $app, \PunchyRascal\DonkeyCms\Logger $log) {
-		if (file_exists(__DIR__ . '/../../../../../cron/'. self::LOCK_FILE)) {
+		if (file_exists(__DIR__ . '/../../cron/'. self::LOCK_FILE)) {
 			throw new \Exception("Lock file exists. Aborting import.");
 		}
-		touch(__DIR__ . '/../../../../../cron/' .self::LOCK_FILE);
+		touch(__DIR__ . '/../../cron/' .self::LOCK_FILE);
 		$this->app = $app;
 		$this->log = $log;
 	}
 
 	public function __destruct() {
-		unlink(__DIR__ . '/../../../../../cron/' . self::LOCK_FILE);
+		unlink(__DIR__ . '/../../cron/' . self::LOCK_FILE);
 		$this->log->info("Peak memory: " . round(memory_get_peak_usage() / 1024 / 1024, 2) . ' MiB');
 		$this->log->info("*import finished*");
 	}

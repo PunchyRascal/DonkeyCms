@@ -27,7 +27,7 @@ class LessCss extends Base {
 	}
 
 	private function getFile() {
-		return __DIR__ . '/../../../../../public_html/css/'
+		return __DIR__ . '/../../public_html/css/'
 			. $this->validateFile(Http::getGet('file')) .'.less';
 	}
 

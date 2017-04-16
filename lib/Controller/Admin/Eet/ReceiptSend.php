@@ -127,11 +127,11 @@ class ReceiptSend extends \PunchyRascal\DonkeyCms\Controller\Admin\Base {
 
 	private function getDispatcher() {
 		$certificate = new Certificate(
-			__DIR__ . '/../../../../../../../eet/EET_CA1_Playground-CZ683555118.p12',
+			__DIR__ . '/../../../../eet/EET_CA1_Playground-CZ683555118.p12',
 			'eet'
 		);
 		return new EetDispatcher(
-			__DIR__ . '/../../../../../../../eet/wsdl.xml',
+			__DIR__ . '/../../../../eet/wsdl.xml',
 			$certificate
 		);
 	}

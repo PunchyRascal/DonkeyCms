@@ -45,7 +45,7 @@ class Application {
 	public function __construct() {
 		$this->setErrorHandler();
 
-		$this->config = new Config(__DIR__ . '/../../../../config.json');
+		$this->config = new Config(__DIR__ . '/../config.json');
 
 		$dbConf = $this->config->db;
 		$this->db = new Database\Database(
