@@ -13,14 +13,28 @@ class Router {
 
 	private $page, $action, $controller, $app;
 
+	/**
+	 * Custom routes added manually
+	 * @var array
+	 */
+	private $additionalRoutes;
+
 	public function __construct(Application $app) {
 		$this->app = $app;
 		$this->page = Http::getGet('p', Http::getPost('p'));
 		$this->action = Http::getGet('action', Http::getPost('action'));
 	}
 
+	public function addRoute(Controller\Base $controller, $page, $action = null) {
+		$this->additionalRoutes[] = [
+			'controller' => $controller,
+			'page' => $page,
+			'action' => $action
+		];
+	}
+
 	/**
-	 * Find the appropriate router
+	 * Find the appropriate route
 	 * @return \PunchyRascal\DonkeyCms\Router
 	 */
 	public function route() {
@@ -186,6 +200,13 @@ class Router {
 						$controllerClass = Controller\Admin\OrderDetail::class;
 						break;
 				}
+		}
+
+		foreach ($this->additionalRoutes AS $route) {
+			if ($this->page === $route['page'] AND $this->action === $route['action']) {
+				$controllerClass = $route['controller'];
+				break;
+			}
 		}
 
 		$this->controller = new $controllerClass($this->app);
