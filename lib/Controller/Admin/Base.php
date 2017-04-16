@@ -10,10 +10,18 @@ abstract class Base extends \PunchyRascal\DonkeyCms\Controller\Base {
 
 	public function execute() {
 		if (Http::getPost('loginSubmit')) {
-			if (Encryption::hash(Http::getPost('passw')) === $this->app->config->adminLogin->password
-					AND Encryption::hash(Http::getPost('user')) === $this->app->config->adminLogin->user) {
+			$userFound = $this->app->db->numRows(
+				"SELECT id FROM e_admin_user WHERE login = %s AND password = %s",
+				Http::getPost('user'),
+				Encryption::hash(Http::getPost('passw'))
+			);
+			if ($userFound === 1) {
 				session_regenerate_id();
 				Session::set('adminLogged', true);
+				$this->app->db->query(
+					"UPDATE e_admin_user SET last_login_date = NOW() WHERE login = %s",
+					Http::getPost('user')
+				);
 				Http::redirect("/?p=admin");
 			}
 			Http::redirect("/?p=admin&m=24");
