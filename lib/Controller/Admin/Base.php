@@ -4,18 +4,17 @@ namespace PunchyRascal\DonkeyCms\Controller\Admin;
 
 use PunchyRascal\DonkeyCms\Http;
 use PunchyRascal\DonkeyCms\Session;
-use PunchyRascal\DonkeyCms\Encryption;
 
 abstract class Base extends \PunchyRascal\DonkeyCms\Controller\Base {
 
 	public function execute() {
 		if (Http::getPost('loginSubmit')) {
-			$userFound = $this->app->db->numRows(
-				"SELECT id FROM e_admin_user WHERE login = %s AND password = %s",
-				Http::getPost('user'),
-				Encryption::hash(Http::getPost('passw'))
+			$user = $this->app->db->getRow(
+				"SELECT password FROM e_admin_user WHERE login = %s",
+				Http::getPost('user')
 			);
-			if ($userFound === 1) {
+
+			if ($user AND $user['password'] AND password_verify(Http::getPost('passw'), $user['password'])) {
 				session_regenerate_id();
 				Session::set('adminLogged', true);
 				$this->app->db->query(
