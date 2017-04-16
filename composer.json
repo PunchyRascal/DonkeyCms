@@ -1,7 +1,13 @@
 {
     "name": "punchyrascal/donkeycms",
     "description": "This is a very cool CMS and eshop!",
-    "type": "library",
+    "type": "project",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://bitbucket.org/w2media/ecommerceapiclient.git"
+		}
+	],
     "keywords": ["cms", "eshop", "donkey"],
     "homepage": "https://github.com/PunchyRascal/DonkeyCms",
     "license": "MIT",
