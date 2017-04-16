@@ -411,6 +411,8 @@ class Order {
 		$template = new \PunchyRascal\DonkeyCms\Template();
 		return $template->setFileName('email/newOrder.twig')
 			->setValue('model', $this)
+			->setValue('appName', $this->app->config->appName)
+			->setValue('appUrl', $this->app->config->appUrl)
 			->process();
 	}
 
