@@ -2,6 +2,8 @@
 
 namespace PunchyRascal\DonkeyCms\Controller;
 
+use PunchyRascal\DonkeyCms\Http;
+
 /**
  * Facebook
  */
@@ -10,6 +12,11 @@ class Facebook extends Base {
 	public function output() {
 
 		$conf = $this->app->config->facebook;
+
+		if (!$conf->appId) {
+			Http::redirect('/');
+		}
+
 		$fb = new \Facebook\Facebook([
 			'app_id' => $conf->appId,
 			'app_secret' => $conf->appSecret,
