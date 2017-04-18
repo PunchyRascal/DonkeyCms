@@ -4,7 +4,7 @@ set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-cd $DIR/../ && ./vendor/bin/tester --colors 1 -j 4 -c c:/wamp/php/php.ini $DIR
+../vendor/bin/tester --colors 1 -j 4 -c c:/wamp/php/php.ini $DIR
 
 echo "
  ____  _  _  ____    ____  ____  ____  ___
@@ -13,7 +13,7 @@ echo "
 (__)  \_)(_/(__)    (____/(__)  (____)\___)
 "
 
-cd $DIR/../ && ./vendor/bin/phpspec run
+../vendor/bin/phpspec run
 
 printf "
   ___  __  ____  ____  ___  ____  ____  ____  __  __   __ _
@@ -23,4 +23,4 @@ printf "
 
 "
 
-cd $DIR/../ && ./vendor/bin/codecept run --colors
+../vendor/bin/codecept run --colors
