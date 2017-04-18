@@ -25,6 +25,10 @@ RewriteCond %{HTTP_HOST} !^$
 RewriteCond %{HTTP_HOST} ^zivotbezkrutosti\.cz [NC]
 RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
+#RewriteCond %{REMOTE_ADDR} !^127\.0\.0\.1
+#RewriteCond %{REQUEST_URI} !/maintenance.php [NC]
+#RewriteRule .* /maintenance.php [L]
+
 RewriteRule ^rss(-news)?\.php /?p=rss [R=301,L]
 
 RewriteRule ^zbozi\.php /?p=zbozi [L]
