@@ -22,6 +22,11 @@ class Runner {
 	 */
 	private $log;
 
+	/**
+	 * @var array List of imported feeds/shops
+	 **/
+	private $shops;
+
 	public function __construct(\PunchyRascal\DonkeyCms\Application $app, \PunchyRascal\DonkeyCms\Logger $log) {
 		if (file_exists(__DIR__ . '/../../cron/'. self::LOCK_FILE)) {
 			throw new \Exception("Lock file exists. Aborting import.");
@@ -29,6 +34,7 @@ class Runner {
 		touch(__DIR__ . '/../../cron/' .self::LOCK_FILE);
 		$this->app = $app;
 		$this->log = $log;
+		$this->shops = $this->app->db->query("SELECT * FROM e_product_import_setup WHERE active = 1");
 	}
 
 	public function __destruct() {
@@ -48,20 +54,26 @@ class Runner {
 	}
 
 	public function run() {
-		foreach (Config::$shops AS $config) {
-			if ($this->runOnly AND $this->runOnly != $config['origin']) {
-				$this->log->info("Skipping %s", $config['origin']);
+		foreach ($this->shops AS $config) {
+			if ($this->runOnly AND $this->runOnly != $config['id']) {
+				$this->log->info("Skipping %s", $config['id']);
 				continue;
 			}
 
 			/* @var $importer \PunchyRascal\DonkeyCms\Importer\Base */
-			$importer = new $config['class']($this->app, $this->log, $config);
+			$class = __NAMESPACE__ .'\\'. $config['importer_class'];
+			$importer = new $class($this->app, $this->log, $config);
 
-			$this->log->info("%s: start processing", $config['origin']);
+			$this->log->info("%s: start processing, priceFactor=%s", $config['id'], $importer->priceFactor);
 
 			$importer->getXml();
 
-			$this->log->info("%s: Is valid: %s", $config['origin'], $importer->isValid ? 1 : 0);
+			$this->app->db->query(
+				"UPDATE e_product_import_setup SET last_import_date = NOW() WHERE id = %s",
+				$importer->origin
+			);
+
+			$this->log->info("%s: Is valid: %s", $config['id'], $importer->isValid ? 1 : 0);
 
 			if ($this->onlyStock) {
 				$this->log->info("%s: Skipping products import", $importer->origin);
@@ -178,7 +190,7 @@ class Runner {
 			$importer->getItemBrand($item),
 			$importer->getItemImgUrl($item),
 			$importer->getItemStock($item) > 0 ? $importer->getItemStock($item) : 0,
-			$importer->getItemPrice($item),
+			round($importer->getItemPrice($item) * $importer->priceFactor),
 			$importer->getAvailabilityDescription($item),
 			$importer->getAvailabilityInDays($item)
 		);

@@ -714,4 +714,14 @@ CREATE TABLE `item_image` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 
--- 2017-04-17 12:09:48
+CREATE TABLE `e_product_import_setup` (
+  `id` varchar(100) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `active` tinyint(4) NOT NULL,
+  `products_url` varchar(255) DEFAULT NULL,
+  `stock_url` varchar(255) DEFAULT NULL,
+  `price_factor` decimal(4,2) NOT NULL,
+  `importer_class` varchar(100) NOT NULL,
+  `min_product_count` int(11) NOT NULL,
+  `last_import_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

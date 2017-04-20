@@ -6,6 +6,8 @@ abstract class Base {
 
 	const TYPE_ZBOZI = 1;
 
+	public $priceFactor;
+
 	/**
 	 * Parsed XML structure
 	 * @var \SimpleXMLElement
@@ -32,11 +34,12 @@ abstract class Base {
 
 	public function __construct(\PunchyRascal\DonkeyCms\Application $app, \PunchyRascal\DonkeyCms\Logger $log, array $config) {
 		$this->app = $app;
-		$this->url = $config['url'];
-		$this->stockUrl = $config['stockUrl'];
+		$this->url = $config['products_url'];
+		$this->stockUrl = $config['stock_url'];
 		$this->log = $log;
-		$this->origin = $config['origin'];
-		$this->minProducts = $config['minProducts'];
+		$this->origin = $config['id'];
+		$this->minProducts = $config['min_product_count'];
+		$this->priceFactor = $config['price_factor'];
 	}
 
 	public function getXml() {
