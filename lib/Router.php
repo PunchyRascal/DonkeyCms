@@ -124,6 +124,9 @@ class Router {
 					case 'adminUserEdit':
 						$controllerClass = Controller\Admin\AdminUserEdit::class;
 						break;
+					case 'productImports':
+						$controllerClass = Controller\Admin\ProductImports::class;
+						break;
 					case 'paymentDelivery':
 						$controllerClass = Controller\Admin\PaymentDelivery\PaymentDeliveryList::class;
 						break;
