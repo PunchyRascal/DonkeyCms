@@ -17,6 +17,8 @@ session_start();
 
 ob_start();
 
-$app = new PunchyRascal\DonkeyCms\Application();
+use PunchyRascal\DonkeyCms;
+
+$app = new DonkeyCms\Application(new DonkeyCms\Config(__DIR__ . '/config.json'));
 
 require_once __DIR__ . '/customRoutes.php';

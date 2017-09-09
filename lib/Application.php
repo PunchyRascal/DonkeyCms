@@ -42,10 +42,10 @@ class Application {
 	 */
 	private $cache;
 
-	public function __construct() {
+	public function __construct(Config $config) {
 		$this->setErrorHandler();
 
-		$this->config = new Config(__DIR__ . '/../config.json');
+		$this->config = $config;
 
 		$dbConf = $this->config->db;
 		$this->db = new Database\Database(
