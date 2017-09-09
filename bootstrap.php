@@ -16,3 +16,7 @@ header("Content-Security-Policy: frame-ancestors 'none'");
 session_start();
 
 ob_start();
+
+$app = new PunchyRascal\DonkeyCms\Application();
+
+require_once __DIR__ . '/customRoutes.php';

@@ -25,9 +25,9 @@ class Router {
 		$this->action = Http::getGet('action', Http::getPost('action'));
 	}
 
-	public function addRoute(Controller\Base $controller, $page, $action = null) {
+	public function addRoute($controllerClass, $page, $action = null) {
 		$this->additionalRoutes[] = [
-			'controller' => $controller,
+			'controller' => $controllerClass,
 			'page' => $page,
 			'action' => $action
 		];
@@ -69,9 +69,6 @@ class Router {
 				break;
 			case 'kontakt':
 				$controllerClass = Controller\Contact::class;
-				break;
-			case 'obyvatele':
-				$controllerClass = Controller\ArticleList::class;
 				break;
 			case 'obchodni-podminky':
 				$controllerClass = Controller\Terms::class;

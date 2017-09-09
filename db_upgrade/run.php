@@ -6,7 +6,6 @@ if (!isset($argv[1]) OR ($argv[1] !== 'PRE' AND $argv[1] !== 'POST')) {
 
 require __DIR__ . '/../bootstrap.php';
 
-$app = new PunchyRascal\DonkeyCms\Application();
 $type = $argv[1];
 $db = $app->db;
 $log = new \PunchyRascal\DonkeyCms\Logger(null, "$type DB upgrade");

@@ -6,3 +6,4 @@
 /auth.json
 /vendor
 tests/_output/*
+/customRoutes.php

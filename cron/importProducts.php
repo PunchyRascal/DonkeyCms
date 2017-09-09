@@ -3,7 +3,7 @@
 require __DIR__ . "/../bootstrap.php";
 
 $runner = new \PunchyRascal\DonkeyCms\Importer\Runner(
-	new \PunchyRascal\DonkeyCms\Application(),
+	$app,
 	new \PunchyRascal\DonkeyCms\Logger('prod-import.log')
 );
 
