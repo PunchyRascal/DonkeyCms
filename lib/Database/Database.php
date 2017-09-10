@@ -99,6 +99,10 @@ class Database {
 		return $result;
 	}
 
+	public function getRows() {
+		return call_user_func_array([$this, 'performRawQuery'], func_get_args());
+	}
+
 	/**
 	 * @return \mysqli_result
 	 * @throws Exception\Database
