@@ -42,6 +42,11 @@ class Application {
 	 */
 	private $cache;
 
+	 /**
+	 * @var Router
+	 */
+	private $router;
+
 	public function __construct(Config $config) {
 		$this->setErrorHandler();
 
@@ -61,7 +66,10 @@ class Application {
 	 * @return \PunchyRascal\DonkeyCms\Router
 	 */
 	public function getRouter() {
-		return new Router($this);
+		if (!$this->router) {
+			$this->router = new Router($this);
+		}
+		return $this->router;
 	}
 
 	public function useProductionFeatures() {
