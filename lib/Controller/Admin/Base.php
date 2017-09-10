@@ -39,17 +39,23 @@ abstract class Base extends \PunchyRascal\DonkeyCms\Controller\Base {
 	}
 
 	private function setAdminCommonData() {
-		$this->getTemplate()->setValue('isAdminLogged', Session::isAdminLogged());
+		$this->getTemplate()
+			->setValue('isAdminLogged', Session::isAdminLogged())
+			->setValue(
+				'resolveCount',
+				$this->db->getColumn("SELECT COUNT(*) FROM e_item WHERE import_resolved = 0")
+			)
+			->setValue(
+				'resolvedCount',
+				$this->db->getColumn("SELECT COUNT(*) FROM e_item WHERE import_resolved = 1")
+			)
+			->setValue('showMenu', Http::getGet('action') === null)
+			->setValue('currentAction', Http::getGet('action'));
+
 		$this->getTemplate()->setValue(
-			'resolveCount',
-			$this->db->getColumn("SELECT COUNT(*) FROM e_item WHERE import_resolved = 0")
+			'customLines',
+			$this->db->getRows("SELECT * FROM donkey_controller ORDER BY sequence")
 		);
-		$this->getTemplate()->setValue(
-			'resolvedCount',
-			$this->db->getColumn("SELECT COUNT(*) FROM e_item WHERE import_resolved = 1")
-		);
-		$this->getTemplate()->setValue('showMenu', Http::getGet('action') === null);
-		$this->getTemplate()->setValue('currentAction', Http::getGet('action'));
 	}
 
 }

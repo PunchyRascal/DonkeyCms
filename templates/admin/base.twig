@@ -182,6 +182,10 @@
 							<td><a class="btn btn-success btn-sm" href="/?p=admin&amp;action=adminUserEdit">Vložit </a></td>
 						</tr>
 
+						{% for item in customLines %}
+							{% include item.admin_menu_template %}
+						{% endfor %}
+
 					</table>
 				</div>
 			</div>
