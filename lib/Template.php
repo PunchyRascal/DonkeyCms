@@ -53,7 +53,10 @@ class Template {
 
 	private function getEngine() {
 		if (!self::$engine) {
-			$loader = new \Twig_Loader_Filesystem(__DIR__ . '/../templates');
+			$loader = new \Twig_Loader_Filesystem([
+				__DIR__ . '/../../../../templates',
+				__DIR__ . '/../templates',
+			]);
 			$twig = new \Twig_Environment($loader, [
 				'cache' => __DIR__ . '/../cache/twig',
 				'auto_reload' => true,
