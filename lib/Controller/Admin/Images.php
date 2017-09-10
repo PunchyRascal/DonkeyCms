@@ -11,8 +11,9 @@ class Images extends Base {
 	private $referenceId;
 	private $table;
 	private $directory;
-	private $redirectUrl;
 	private $path;
+	private $setup;
+	private $type;
 
 	public function execute() {
 		$this->initData();
@@ -25,37 +26,48 @@ class Images extends Base {
 	}
 
 	private function initData() {
-		$this->path = __DIR__ . '/../../../public_html/';
+		$this->path = __DIR__ . '/../../../../../../public_html/';
+		$this->setup = $this->db->getRow(
+			"SELECT * FROM donkey_entity_image_setup WHERE id = %s",
+			Http::getPost("type", Http::getGet("type"))
+		);
 		$this->referenceId = (int) Http::getPost('id', Http::getGet('id'));
-		if (Http::getPost('type', Http::getGet('type')) == 'art') {
-			$this->table = $this->db->createParam('ID', 'art_image');
-			$this->directory = 'upload/article';
-			$this->redirectUrl = 'action=images&type=art&id='. $this->referenceId;
-		} else {
-			$this->table = $this->db->createParam('ID', 'item_image');
-			$this->directory = 'upload/product';
-			$this->redirectUrl = 'action=images&type=product&id='. $this->referenceId;
+		$this->table = $this->db->createParam("ID", $this->setup['image_table_name']);
+		$this->directory = $this->setup['directory'];
+		$this->type = $this->setup['id'];
+
+		if (!$this->referenceId) {
+			throw new \Exception("Missing reference ID");
+		}
+
+		if (!$this->setup) {
+			throw new \Exception("Missing setup");
 		}
 	}
 
 	public function output() {
 		$this->getTemplate()->setFileName('admin/images.twig');
 
-		if ($this->directory === 'upload/product') {
-			$item = $this->db->getRow("SELECT 'e-shop' AS p, name FROM e_item WHERE id = %s", $this->referenceId);
-		} else {
-			$item = $this->db->getRow("SELECT 'art' AS p, heading AS name FROM article WHERE id = %s", $this->referenceId);
-		}
+		$item = $this->db->getRow(
+			"SELECT %s FROM %s WHERE id = %s",
+			$this->db->createParam("ID", $this->setup['label_name']),
+			$this->db->createParam("ID", $this->setup['table_name']),
+			$this->referenceId
+		);
 
-		$this->getTemplate()->appendArray(array(
+
+		$this->getTemplate()->appendArray([
 			'dirName' => $this->directory,
-			'type' => Http::getGet('type'),
+			'type' => $this->setup['id'],
 			'item' => $item,
+			'detailPageName' => $this->setup['detail_page_name'],
 			'itemId' => $this->referenceId,
-			'images' => $this->db->query(
-				"SELECT * FROM %s WHERE home_art = %s ORDER BY art_img_count ASC", $this->table, $this->referenceId
+			'images' => $this->db->getRows(
+				"SELECT * FROM %s WHERE home_art = %s ORDER BY art_img_count ASC",
+				$this->table,
+				$this->referenceId
 			)
-		));
+		]);
 
 		return parent::output();
 	}
@@ -67,9 +79,9 @@ class Images extends Base {
 			foreach ($files AS $index => $file) {
 				$this->handleFile($index, $file);
 			}
-			Http::redirect("/?p=admin&$this->redirectUrl&m=5");
+			Http::redirect("/?p=admin&action=images&id=$this->referenceId&type=$this->type&m=5");
 		}
-		Http::redirect("/?p=admin&$this->redirectUrl&m=13");
+		Http::redirect("/?p=admin&action=images&id=$this->referenceId&type=$this->type&m=13");
 	}
 
 	private function handleFile($index, $file) {
@@ -94,7 +106,9 @@ class Images extends Base {
 			$extension
 		);
 		$imagePath = $this->path.$this->directory ."/". $this->referenceId. "_". $newImageNumber. ".". $extension;
-		copy($file['tmp_name'], $imagePath);
+		if (!copy($file['tmp_name'], $imagePath)) {
+			throw new \Exception("Could not copy uploaded file to $imagePath");
+		}
 		// thumbnail
 		$thumbPath = $this->path.$this->directory ."/T/". $this->referenceId. "_". $newImageNumber. ".". $extension;
 		list($width, $height) = getimagesize($imagePath);
@@ -150,14 +164,13 @@ class Images extends Base {
 	}
 
 	private function handleDelete() {
-		$type = Http::getPost('type');
 		$index = Http::getPost('index');
 
 		$this->db->query("DELETE FROM %s WHERE home_art = %s AND art_img_count = %s", $this->table, $this->referenceId, $index);
 		unlink($this->path.$this->directory.'/'.$this->referenceId.'_'. $index .'.jpg');
 		unlink($this->path.$this->directory.'/T/'. $this->referenceId .'_'. $index .'.jpg');
 
-		Http::redirect("/?p=admin&action=images&type=$type&id=$this->referenceId&m=1");
+		Http::redirect("/?p=admin&action=images&type=$this->type&id=$this->referenceId&m=1");
 	}
 
 }
