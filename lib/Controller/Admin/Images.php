@@ -123,10 +123,12 @@ class Images extends Base {
 			$count++;
 		}
 		// watermark
-		$watermark = imagecreatefrompng($this->path . "images/watermark.png");
-		list($watermarkWidth, $watermarkHeight) = getimagesize("./images/watermark.png");
-		imagecopy($originalResource, $watermark, 0, $height - $watermarkHeight, 0, 0, $watermarkWidth, $watermarkHeight);
-		imagejpeg($originalResource, $imagePath, 95);
+		if ($this->setup['watermark_image']) {
+			$watermark = imagecreatefrompng($this->path . "images/watermark.png");
+			list($watermarkWidth, $watermarkHeight) = getimagesize("./images/watermark.png");
+			imagecopy($originalResource, $watermark, 0, $height - $watermarkHeight, 0, 0, $watermarkWidth, $watermarkHeight);
+			imagejpeg($originalResource, $imagePath, 95);
+		}
 	}
 
 	private function getThumbDimensions($originalWidth, $originalHeight) {
