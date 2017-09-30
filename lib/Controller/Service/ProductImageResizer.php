@@ -35,14 +35,14 @@ class ProductImageResizer extends \PunchyRascal\DonkeyCms\Controller\Base {
 	private function getPath() {
 		$origPath = $this->db->getColumn("SELECT image_url FROM e_item WHERE id = %s", $this->productId);
 		if (!$origPath) {
-			$origPath = __DIR__ . "/../../../public_html/upload/product/T/{$this->productId}_1.jpg";
+			$origPath = __DIR__ . "/../../../../../../public_html/upload/product/T/{$this->productId}_1.jpg";
 		}
 		return $origPath;
 	}
 
 	private function getResizedImage() {
 		$origPath = $this->getPath();
-		$this->newPath = __DIR__ . "/../../../public_html/upload/thumbs/resizer_$this->productId.jpg";
+		$this->newPath = __DIR__ . "/../../../../../../public_html/upload/thumbs/resizer_$this->productId.jpg";
 		list($origW, $origH) = getimagesize($origPath);
 		list($newW, $newH) = $this->calculateNewDimensions($origW, $origH);
 
