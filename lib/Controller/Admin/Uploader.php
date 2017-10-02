@@ -7,7 +7,7 @@ use PunchyRascal\DonkeyCms\Format;
 
 class Uploader extends Base {
 
-	private $uploadDir = "/../../../public_html/upload";
+	private $uploadDir = "/../../../../../../public_html/upload";
 	private $folder;
 
 	private function getFolderParam() {
