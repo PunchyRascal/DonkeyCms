@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "92de495ab491f53ecb849c378f94ac6a",
@@ -35,12 +35,12 @@
             ],
             "authors": [
                 {
-                    "name": "Berejeb Anis",
-                    "email": "anis.berejeb@gmail.com"
-                },
-                {
                     "name": "Charron Pierrick",
                     "email": "pierrick@webstart.fr"
+                },
+                {
+                    "name": "Berejeb Anis",
+                    "email": "anis.berejeb@gmail.com"
                 }
             ],
             "description": "Light PHP wrapper for the OAuth 2.0 protocol (based on OAuth 2.0 Authorization Protocol draft-ietf-oauth-v2-15)",
@@ -515,24 +515,24 @@
         },
         {
             "name": "robrichards/xmlseclibs",
-            "version": "2.0.1",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/robrichards/xmlseclibs.git",
-                "reference": "53bb1e9cae490a8f93af41bd9df6ea897161ca05"
+                "reference": "118450a141ac2336be1b5e5e91a22229441b0277"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/53bb1e9cae490a8f93af41bd9df6ea897161ca05",
-                "reference": "53bb1e9cae490a8f93af41bd9df6ea897161ca05",
+                "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/118450a141ac2336be1b5e5e91a22229441b0277",
+                "reference": "118450a141ac2336be1b5e5e91a22229441b0277",
                 "shasum": ""
             },
             "require": {
                 "php": ">= 5.3"
             },
             "suggest": {
-                "ext/mcrypt": "MCrypt extension",
-                "ext/openssl": "OpenSSL extension"
+                "ext-mcrypt": "MCrypt extension",
+                "ext-openssl": "OpenSSL extension"
             },
             "type": "library",
             "autoload": {
@@ -552,7 +552,7 @@
                 "xml",
                 "xmldsig"
             ],
-            "time": "2016-09-08T13:15:00+00:00"
+            "time": "2019-11-05T11:51:00+00:00"
         },
         {
             "name": "tinymce/tinymce",
@@ -696,7 +696,11 @@
                 }
             ],
             "description": "W2media Ecommerce API client",
-            "time": "2015-03-22T11:12:03+00:00"
+            "homepage": "https://bitbucket.org/w2media/ecommerceapiclient",
+            "support": {
+                "source": "https://bitbucket.org/w2media/ecommerceapiclient/src/258f912febcdc290f2a693fc1fa167e196877f3f/?at=1.01"
+            },
+            "time": "2015-03-22T10:12:03+00:00"
         }
     ],
     "packages-dev": [
@@ -1643,7 +1647,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "🐘 Generates neat PHP code for you. Supports new PHP 7.1 features.",
+            "description": "? Generates neat PHP code for you. Supports new PHP 7.1 features.",
             "homepage": "https://nette.org",
             "keywords": [
                 "code",
@@ -1707,7 +1711,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "🍀 RobotLoader: high performance and comfortable autoloader that will search and autoload classes within your application.",
+            "description": "? RobotLoader: high performance and comfortable autoloader that will search and autoload classes within your application.",
             "homepage": "https://nette.org",
             "keywords": [
                 "autoload",
@@ -2062,8 +2066,7 @@
             "authors": [
                 {
                     "name": "Chris Boulton",
-                    "homepage": "http://github.com/chrisboulton",
-                    "role": "Original developer"
+                    "homepage": "http://github.com/chrisboulton"
                 }
             ],
             "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
@@ -2654,6 +2657,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2016-12-08T20:27:08+00:00"
         },
         {
