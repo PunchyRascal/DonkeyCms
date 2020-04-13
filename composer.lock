@@ -4,48 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "92de495ab491f53ecb849c378f94ac6a",
+    "content-hash": "0fbb1f3e4846c255955556fe4ba0368a",
     "packages": [
-        {
-            "name": "adoy/oauth2",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/adoy/PHP-OAuth2.git",
-                "reference": "83e248f761f1c2f742d321d891cc3ce63089db05"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/adoy/PHP-OAuth2/zipball/83e248f761f1c2f742d321d891cc3ce63089db05",
-                "reference": "83e248f761f1c2f742d321d891cc3ce63089db05",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "OAuth2": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-2.1"
-            ],
-            "authors": [
-                {
-                    "name": "Charron Pierrick",
-                    "email": "pierrick@webstart.fr"
-                },
-                {
-                    "name": "Berejeb Anis",
-                    "email": "anis.berejeb@gmail.com"
-                }
-            ],
-            "description": "Light PHP wrapper for the OAuth 2.0 protocol (based on OAuth 2.0 Authorization Protocol draft-ietf-oauth-v2-15)",
-            "time": "2015-08-03T19:57:45+00:00"
-        },
         {
             "name": "erusev/parsedown",
             "version": "1.6.2",
@@ -391,23 +351,25 @@
                 "php",
                 "stylesheet"
             ],
+            "abandoned": true,
             "time": "2015-07-13T20:34:18+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v5.2.23",
+            "version": "v5.2.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "7115df4a6f76281109ebe352900c42403b728bb4"
+                "reference": "acba50393dd03da69a50226c139722af8b153b11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/7115df4a6f76281109ebe352900c42403b728bb4",
-                "reference": "7115df4a6f76281109ebe352900c42403b728bb4",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/acba50393dd03da69a50226c139722af8b153b11",
+                "reference": "acba50393dd03da69a50226c139722af8b153b11",
                 "shasum": ""
             },
             "require": {
+                "ext-ctype": "*",
                 "php": ">=5.0.0"
             },
             "require-dev": {
@@ -451,12 +413,12 @@
             ],
             "authors": [
                 {
-                    "name": "Jim Jagielski",
-                    "email": "jimjag@gmail.com"
-                },
-                {
                     "name": "Marcus Bointon",
                     "email": "phpmailer@synchromedia.co.uk"
+                },
+                {
+                    "name": "Jim Jagielski",
+                    "email": "jimjag@gmail.com"
                 },
                 {
                     "name": "Andy Prevost",
@@ -467,7 +429,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-03-15T19:32:56+00:00"
+            "time": "2020-03-19T14:29:37+00:00"
         },
         {
             "name": "robrichards/wse-php",
@@ -661,46 +623,6 @@
                 "templating"
             ],
             "time": "2017-03-22T15:40:09+00:00"
-        },
-        {
-            "name": "w2media/ecommerceapiclient",
-            "version": "1.01",
-            "source": {
-                "type": "git",
-                "url": "https://bitbucket.org/w2media/ecommerceapiclient.git",
-                "reference": "258f912febcdc290f2a693fc1fa167e196877f3f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://bitbucket.org/w2media/ecommerceapiclient/get/258f912febcdc290f2a693fc1fa167e196877f3f.zip",
-                "reference": "258f912febcdc290f2a693fc1fa167e196877f3f",
-                "shasum": ""
-            },
-            "require": {
-                "adoy/oauth2": "dev-master",
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "W2\\": "src/"
-                }
-            },
-            "license": [
-                "EULA"
-            ],
-            "authors": [
-                {
-                    "name": "Petr Sedlacek",
-                    "email": "pesu@w2media.cz"
-                }
-            ],
-            "description": "W2media Ecommerce API client",
-            "homepage": "https://bitbucket.org/w2media/ecommerceapiclient",
-            "support": {
-                "source": "https://bitbucket.org/w2media/ecommerceapiclient/src/258f912febcdc290f2a693fc1fa167e196877f3f/?at=1.01"
-            },
-            "time": "2015-03-22T10:12:03+00:00"
         }
     ],
     "packages-dev": [
@@ -915,12 +837,12 @@
             "version": "1.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/facebook/php-webdriver.git",
+                "url": "https://github.com/php-webdriver/php-webdriver-archive.git",
                 "reference": "3ea034c056189e11c0ce7985332a9f4b5b2b5db2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/3ea034c056189e11c0ce7985332a9f4b5b2b5db2",
+                "url": "https://api.github.com/repos/php-webdriver/php-webdriver-archive/zipball/3ea034c056189e11c0ce7985332a9f4b5b2b5db2",
                 "reference": "3ea034c056189e11c0ce7985332a9f4b5b2b5db2",
                 "shasum": ""
             },
@@ -960,6 +882,7 @@
                 "selenium",
                 "webdriver"
             ],
+            "abandoned": "php-webdriver/webdriver",
             "time": "2017-03-22T10:56:03+00:00"
         },
         {
@@ -4057,9 +3980,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "adoy/oauth2": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
