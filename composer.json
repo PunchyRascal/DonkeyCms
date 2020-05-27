@@ -9,7 +9,7 @@
 		"twig/twig": "~1.0",
 		"tinymce/tinymce": "~4.1",
 		"oyejorge/less.php": "v1.7.0.5",
-		"phpmailer/phpmailer": "^5.2",
+		"phpmailer/phpmailer": "^6.1",
 		"google/recaptcha": "~1.1",
 		"heureka/overeno-zakazniky": "^2.0",
 		"kevinlebrun/colors.php": "^1.0",
